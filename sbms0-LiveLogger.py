@@ -1,50 +1,38 @@
 #!/usr/bin/env python3
 """
-SBMS0 Live-Logger
-=================
+SBMS0 Live-Logger (InfluxDB-Version)
+====================================
 Liest die Daten des Electrodacus SBMS0 über USB/Serial,
-zeigt sie live im Terminal an und loggt sie jede Sekunde
-in eine CSV-Datei.
+zeigt sie live im Terminal an und schreibt sie JEDDE SEKUNDE
+in die lokale InfluxDB 1.8 (Datenbank 'SBMS', Measurement 'SBMS_Metrics').
 
   - Live-Anzeige:  übersichtliche Tabelle im Terminal (SSH-tauglich)
-  - Logging:       1 Datensatz pro Sekunde in sbms_log_YYYY-MM-DD.csv
+  - Logging:       1 Schreibvorgang pro Sekunde -> InfluxDB
+  - Kompatibel:    gleiche Felder/Tags wie sbms0-SerialToInfluxDB.py,
+                   daher funktioniert das bestehende Grafana-Dashboard weiter
   - Beenden:       STRG+C
 
-Voraussetzung:  pip3 install pyserial
+Voraussetzung:  pip3 install pyserial influxdb
 Aufruf:         python3 sbms0-LiveLogger.py [/dev/ttyUSB0]
-
-Basierend auf der Dekompressions-Logik von sbms0-SerialToInfluxDB.py
-(David Buron, public domain).
 """
 
-import csv
 import datetime
-import os
 import sys
 import time
 
 import serial
+from influxdb import InfluxDBClient
 
 # ---------------------------------------------------------------- Konfiguration
 SERIAL_PORT = sys.argv[1] if len(sys.argv) > 1 else '/dev/ttyUSB0'
 BAUD_RATE = 921600
-LOG_INTERVAL = 1.0          # Sekunden zwischen CSV-Einträgen
-LOG_DIR = os.path.dirname(os.path.abspath(__file__))
-CSV_HEADER = [
-    'timestamp',
-    'SOC %',
-    'Battery Voltage V',
-    'Battery Current A',
-    'Cell 1 V', 'Cell 2 V', 'Cell 3 V', 'Cell 4 V',
-    'Cell 5 V', 'Cell 6 V', 'Cell 7 V', 'Cell 8 V',
-    'Cell Delta V',
-    'PV Total Current A', 'PV1 A', 'PV2 A',
-    'External Load A',
-    'Internal Temp C', 'External Temp C',
-    'Heat 1', 'Heat 2',
-    'ADC2 V', 'ADC3 V', 'ADC4 V',
-    'Error Code', 'Error Binary', 'Flags',
-]
+LOG_INTERVAL = 1.0                      # Sekunden zwischen InfluxDB-Schreibvorgängen
+INFLUX_HOST = 'localhost'
+INFLUX_PORT = 8086
+INFLUX_DB = 'SBMS'
+INFLUX_MEASUREMENT = 'SBMS_Metrics'
+INFLUX_TAG_NAME = 'SBMS0a'              # gleicher Tag wie im bestehenden Dashboard
+CSV_FALLBACK = True                     # bei InfluxDB-Fehlern zusätzlich in CSV schreiben
 
 # ---------------------------------------------------------------- Dekompression
 def dcmp(p, s, d):
@@ -115,6 +103,46 @@ def parse_line(line):
         'Flags': flags,
     }
 
+
+def build_json_body(data, ts):
+    """Baut das InfluxDB-Payload im gleichen Format wie das bestehende Dashboard erwartet."""
+    return [
+        {
+            "measurement": INFLUX_MEASUREMENT,
+            "tags": {
+                "Name": INFLUX_TAG_NAME
+            },
+            # Nanosekunden-Zeitstempel -> keine Kollisionen auch bei 1 Hz
+            "time": int(time.mktime(ts.timetuple())) * 1000000000 + ts.microsecond * 1000,
+            "fields": {
+                "External Temperature": data['External Temp'],
+                "Internal Temperature": data['Internal Temp'],
+                "Monitor Flags": data['Flags'],
+                "Battery Voltage": data['Battery Voltage'],
+                "Battery Current": data['Battery Current'],
+                "PV Total Current": data['PV Total'],
+                "PV1": data['PV1'],
+                "PV2": data['PV2'],
+                "External Load": data['External Load'],
+                "State of Charge": data['SOC'],
+                "ADC2": data['ADC2'],
+                "ADC3": data['ADC3'],
+                "ADC4": data['ADC4'],
+                "Heat 1": data['Heat 1'],
+                "Heat 2": data['Heat 2'],
+                "Cell 1": data['Cells'][0],
+                "Cell 2": data['Cells'][1],
+                "Cell 3": data['Cells'][2],
+                "Cell 4": data['Cells'][3],
+                "Cell 5": data['Cells'][4],
+                "Cell 6": data['Cells'][5],
+                "Cell 7": data['Cells'][6],
+                "Cell 8": data['Cells'][7],
+                "Cell Delta": data['Cell Delta'],
+            }
+        }
+    ]
+
 # ---------------------------------------------------------------- Anzeige
 CLEAR = '\033[2J\033[H'
 RESET = '\033[0m'
@@ -126,12 +154,13 @@ def fmt(value, unit='', width=8, decimals=2):
     return f'{str(value):>{width}}{unit}'
 
 
-def render(data, ts, status):
+def render(data, ts, status, writes_ok, writes_err):
     """Baut die Terminal-Anzeige als String."""
     lines = []
     lines.append(CLEAR + BOLD + '=' * 62)
-    lines.append('  SBMS0 LIVE-MONITOR   ' + ts.strftime('%Y-%m-%d %H:%M:%S'))
+    lines.append('  SBMS0 LIVE-MONITOR (InfluxDB @ 1 Hz)   ' + ts.strftime('%Y-%m-%d %H:%M:%S'))
     lines.append('  ' + status)
+    lines.append(f'  InfluxDB: {writes_ok} OK / {writes_err} Fehler')
     lines.append('=' * 62 + RESET)
     lines.append('')
     lines.append(f'  SOC          : {fmt(data["SOC"], " %")}')
@@ -162,23 +191,39 @@ def render(data, ts, status):
     lines.append(f'  Error-Code   : {data["Error Code"]}  ({data["Error Binary"]})')
     lines.append(f'  Flags        : {data["Flags"] or "(keine)"}')
     lines.append('')
-    lines.append('  Logging: ' + log_file.name + '   (Beenden: STRG+C)')
+    lines.append('  Speicherung: InfluxDB ' + INFLUX_DB + '/' + INFLUX_MEASUREMENT
+                 + ('  (+ CSV-Fallback)' if CSV_FALLBACK else '')
+                 + '   Beenden: STRG+C')
     return '\n'.join(lines)
-
-# ---------------------------------------------------------------- CSV-Logging
-today = datetime.date.today().isoformat()
-log_file = open(os.path.join(LOG_DIR, f'sbms_log_{today}.csv'), 'a', newline='')
-writer = csv.writer(log_file)
-# Kopfzeile nur schreiben, wenn Datei neu/leer ist
-if os.path.getsize(log_file.name) == 0:
-    writer.writerow(CSV_HEADER)
-    log_file.flush()
 
 # ---------------------------------------------------------------- Hauptschleife
 def main():
+    # --- InfluxDB verbinden ---
+    try:
+        client = InfluxDBClient(host=INFLUX_HOST, port=INFLUX_PORT)
+        client.switch_database(INFLUX_DB)
+        print('InfluxDB verbunden: ' + INFLUX_DB)
+    except Exception as e:
+        print(f'FEHLER: InfluxDB nicht erreichbar: {e}')
+        print('Laeuft InfluxDB? (systemctl status influxdb)')
+        sys.exit(1)
+
+    # --- CSV-Fallback oeffnen ---
+    csv_file = None
+    csv_writer = None
+    if CSV_FALLBACK:
+        import csv
+        import os
+        csv_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                f'sbms_fallback_{datetime.date.today().isoformat()}.csv')
+        csv_file = open(csv_path, 'a', newline='')
+        csv_writer = csv.writer(csv_file)
+
     status = 'Warte auf Daten von ' + SERIAL_PORT + ' ...'
     data = None
     last_log = 0.0
+    writes_ok = 0
+    writes_err = 0
 
     ser = None
     try:
@@ -192,14 +237,13 @@ def main():
         while True:
             now = time.time()
 
-            # --- Neue Serial-Daten lesen und parsen (nicht blockierend Dank timeout) ---
+            # --- Neue Serial-Daten lesen und parsen ---
             try:
                 line = ser.readline().decode('ascii', errors='ignore').strip()
                 if line and len(line) >= 59:
                     data = parse_line(line)
                     status = 'Daten OK - letztes Update: ' + datetime.datetime.now().strftime('%H:%M:%S')
             except (serial.SerialException, OSError):
-                # USB weggefallen -> neu verbinden
                 status = 'WARNUNG: Serial-Port verloren - warte auf Geraet ...'
                 try:
                     ser.close()
@@ -211,39 +255,47 @@ def main():
                 except (serial.SerialException, OSError):
                     continue
             except (IndexError, ValueError):
-                # Kaputte Zeile -> ignorieren, weiterlesen
-                pass
+                pass  # kaputte Zeile -> ignorieren
 
-            # --- Alle LOG_INTERVAL Sekunden: anzeigen + CSV schreiben ---
+            # --- Alle LOG_INTERVAL Sekunden: InfluxDB schreiben + anzeigen ---
             if now - last_log >= LOG_INTERVAL:
                 last_log = now
                 ts = datetime.datetime.now()
 
                 if data is None:
-                    # Noch keine gueltigen Daten: Platzhalter
-                    data = {k: (0.0 if not isinstance(v, str) else '') for k, v in
-                            [(k, CSV_HEADER[i]) for i, k in enumerate(CSV_HEADER[1:])]}
-                    data['Cells'] = [0.0] * 8
+                    # Noch keine gueltigen Daten -> Anzeige in Ruhe lassen, nichts schreiben
+                    time.sleep(0.1)
+                    continue
+
+                # InfluxDB schreiben (jede Sekunde, auch wenn keine neuen Serial-Daten kamen)
+                try:
+                    client.write_points(build_json_body(data, ts))
+                    writes_ok += 1
+                except Exception as e:
+                    writes_err += 1
+                    status = 'FEHLER beim Schreiben in InfluxDB: ' + str(e)[:40]
+                    # CSV-Fallback, damit keine Datenluecke entsteht
+                    if csv_writer:
+                        row = [ts.isoformat(timespec='seconds'), data['SOC'],
+                               data['Battery Voltage'], data['Battery Current']]
+                        row += data['Cells']
+                        row += [data['Cell Delta'], data['PV Total'], data['PV1'], data['PV2'],
+                                data['External Load'], data['Internal Temp'], data['External Temp'],
+                                data['Heat 1'], data['Heat 2'], data['ADC2'], data['ADC3'],
+                                data['ADC4'], data['Error Code'], data['Error Binary'], data['Flags']]
+                        csv_writer.writerow(row)
+                        csv_file.flush()
 
                 # Terminal-Anzeige
-                print(render(data, ts, status))
-
-                # CSV-Zeile schreiben
-                row = [ts.isoformat(timespec='seconds'),
-                       data['SOC'], data['Battery Voltage'], data['Battery Current']]
-                row += data['Cells']
-                row += [data['Cell Delta'], data['PV Total'], data['PV1'], data['PV2'],
-                        data['External Load'], data['Internal Temp'], data['External Temp'],
-                        data['Heat 1'], data['Heat 2'], data['ADC2'], data['ADC3'], data['ADC4'],
-                        data['Error Code'], data['Error Binary'], data['Flags']]
-                writer.writerow(row)
-                log_file.flush()
+                print(render(data, ts, status, writes_ok, writes_err))
 
     except KeyboardInterrupt:
         pass
     finally:
-        print(CLEAR + 'Beendet. Log-Datei: ' + log_file.name)
-        log_file.close()
+        print(CLEAR + 'Beendet.')
+        print(f'Statistik: {writes_ok} Eintraege in InfluxDB, {writes_err} Fehler.')
+        if csv_file:
+            csv_file.close()
         if ser:
             ser.close()
 
