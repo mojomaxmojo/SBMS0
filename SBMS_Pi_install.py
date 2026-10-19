@@ -17,7 +17,7 @@ os.system("influx -execute 'CREATE DATABASE SBMS'")
 
 os.system("sudo apt-get install python3-pip")
 os.system("pip3 install pyserial")
-os.system("pip3 install pip install influxdb")
+os.system("pip3 install influxdb")
 
 # Install Grafana
 os.system("apt-get install -y adduser libfontconfig1")

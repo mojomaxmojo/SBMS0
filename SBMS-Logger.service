@@ -1,10 +1,12 @@
 [Unit]
 Description=Serial logging service for SBMS0 charge controller python script
 After=influxdb.service
+Requires=influxdb.service
 
 [Service]
-ExecStart=sudo python /home/SBMS0/sbms0-SerialToInfluxDB.py
+ExecStart=/usr/bin/python3 /home/SBMS0/sbms0-SerialToInfluxDB.py
 Restart=always
+RestartSec=10
 StandardOutput=syslog
 StandardError=syslog
 SyslogIdentifier=SBMS
