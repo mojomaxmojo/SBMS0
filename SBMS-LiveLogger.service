@@ -1,0 +1,17 @@
+[Unit]
+Description=SBMS0 Serial LiveLogger (1 Hz -> InfluxDB)
+After=network.target influxdb.service
+Requires=influxdb.service
+
+[Service]
+ExecStart=/usr/bin/python3 /home/SBMS0/sbms0-LiveLogger.py
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=SBMS
+User=dietpi
+Group=dietpi
+
+[Install]
+WantedBy=multi-user.target
