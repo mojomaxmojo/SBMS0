@@ -124,9 +124,15 @@ systemctl enable SBMS-LiveLogger
 # ------------------------------------------------------------------------------
 # 5. Grafana starten
 # ------------------------------------------------------------------------------
+echo ">>> Grafana: 1s-Refresh freischalten ..."
+# Grafana begrenzt Refresh standardmäßig auf min 5s -> auf 1s lockern:
+if ! grep -q "^min_refresh_interval" /etc/grafana/grafana.ini 2>/dev/null; then
+  printf '\n[panels]\nmin_refresh_interval = 1s\n' >> /etc/grafana/grafana.ini
+fi
+
 echo ">>> Starte Grafana ..."
 systemctl enable grafana-server
-systemctl start grafana-server
+systemctl restart grafana-server
 
 # ------------------------------------------------------------------------------
 # 6. Grafana-Datasource automatisch anlegen
