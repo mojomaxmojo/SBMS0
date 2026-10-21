@@ -19,7 +19,7 @@ SBMS_DIR="/home/SBMS0"
 INFLUX_DIR="/opt/influxdb"
 GRAFANA_DIR="/opt/grafana"
 INFLUX_VERSION="1.8.10"
-GRAFANA_VERSION="10.4.2"
+GRAFANA_VERSION="latest"   # zieht automatisch die aktuelle Version (13.x)
 RUN_USER="dietpi"
 
 echo "=============================================================="
@@ -36,11 +36,13 @@ fi
 # 1. Abhängigkeiten (DietPi-Tools nutzen, da apt-Quellen durch DietPi verwaltet)
 # ------------------------------------------------------------------------------
 echo ">>> Installiere Basis-Pakete ..."
-dietpi-software install 200 2>/dev/null || true   # Python 3 pip (DietPi-Software-ID)
-pip3 install --quiet pyserial influxdb || {
-  apt-get update -qq && apt-get install -y -qq python3-pip
+apt-get update -qq || true
+# Debian-Pakete bevorzugt (Trixie-kompatibel, kein PEP-668-Problem):
+apt-get install -y -qq python3-serial python3-influxdb python3-pip wget tar 2>/dev/null || true
+# Fallback via pip (Trixie: PEP 668 erzwingt --break-system-packages)
+python3 -c "import serial, influxdb" 2>/dev/null || \
+  pip3 install --quiet --break-system-packages pyserial influxdb 2>/dev/null || \
   pip3 install --quiet pyserial influxdb
-}
 
 # ------------------------------------------------------------------------------
 # 2. InfluxDB 1.8 (Tarball - kein apt nötig, Debian-Version-g robust)
@@ -50,12 +52,10 @@ if [ ! -f "$INFLUX_DIR/influxd" ]; then
   cd /tmp
   wget -q "https://dl.influxdata.com/influxdb/releases/influxdb-${INFLUX_VERSION}_linux_amd64.tar.gz"
   tar -xzf "influxdb-${INFLUX_VERSION}_linux_amd64.tar.gz"
-  cp "influxdb-${INFLUX_VERSION}_linux_amd64/influxd"  "$INFLUX_DIR/" 2>/dev/null || {
-    mkdir -p "$INFLUX_DIR"
-    cp "influxdb-${INFLUX_VERSION}_linux_amd64/influxd"  "$INFLUX_DIR/"
-    cp "influxdb-${INFLUX_VERSION}_linux_amd64/influx"   "$INFLUX_DIR/"
-  }
-  rm -rf "influxdb-${INFLUX_VERSION}_linux_amd64" "influxdb-${INFLUX_VERSION}_linux_amd64.tar.gz"
+  mkdir -p "$INFLUX_DIR"
+  # Ordnername je nach Release: influxdb-1.8.10-1/ oder influxdb-1.8.10/ - daher wildcard:
+  find /tmp/influxdb-${INFLUX_VERSION}*/ -maxdepth 2 \( -name influxd -o -name influx \) -exec cp {} "$INFLUX_DIR/" \;
+  rm -rf /tmp/influxdb-${INFLUX_VERSION}* "influxdb-${INFLUX_VERSION}_linux_amd64.tar.gz"
 else
   echo ">>> InfluxDB bereits installiert - überspringe Download."
 fi
@@ -67,13 +67,14 @@ chown -R "$RUN_USER":"$RUN_USER" "$INFLUX_DIR" /var/lib/influxdb
 # ------------------------------------------------------------------------------
 # 3. Grafana (Tarball)
 # ------------------------------------------------------------------------------
-if [ ! -f "$GRAFANA_DIR/bin/grafana-server" ]; then
-  echo ">>> Lade Grafana ${GRAFANA_VERSION} ..."
+if [ ! -f "$GRAFANA_DIR/bin/grafana-server" ] && [ ! -f "$GRAFANA_DIR/bin/grafana" ]; then
+  echo ">>> Lade Grafana (${GRAFANA_VERSION}) ..."
   cd /tmp
   wget -q "https://dl.grafana.com/oss/release/grafana-${GRAFANA_VERSION}.linux-amd64.tar.gz"
   tar -xzf "grafana-${GRAFANA_VERSION}.linux-amd64.tar.gz"
-  mv "grafana-v${GRAFANA_VERSION}" "$GRAFANA_DIR"
   rm -f "grafana-${GRAFANA_VERSION}.linux-amd64.tar.gz"
+  # Entpackter Ordner heisst grafana-v13.x.x etc. -> robust verschieben:
+  mv /tmp/grafana-v* "$GRAFANA_DIR"
 else
   echo ">>> Grafana bereits installiert - überspringe Download."
 fi
@@ -106,6 +107,13 @@ if [ ! -f /etc/influxdb/influxdb.conf ]; then
 fi
 chown -R "$RUN_USER":"$RUN_USER" /etc/influxdb
 
+# Grafana-Binary ermitteln (ab v11 gibt es 'grafana', ältere nennen sich 'grafana-server')
+if [ -f "$GRAFANA_DIR/bin/grafana" ]; then
+  GRAFANA_BIN="$GRAFANA_DIR/bin/grafana server"
+else
+  GRAFANA_BIN="$GRAFANA_DIR/bin/grafana-server"
+fi
+
 cat > /etc/systemd/system/grafana-server.service <<EOF
 [Unit]
 Description=Grafana Dashboard Server
@@ -114,9 +122,8 @@ Requires=influxdb.service
 
 [Service]
 User=${RUN_USER}
-ExecStart=${GRAFANA_DIR}/bin/grafana-server \\
+ExecStart=${GRAFANA_BIN} \\
   --homepath ${GRAFANA_DIR} \\
-  --config ${GRAFANA_DIR}/conf/defaults.ini \\
   cfg:default.paths.data=/var/lib/grafana \\
   cfg:default.paths.logs=/var/log/grafana
 Restart=always
