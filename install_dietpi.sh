@@ -28,7 +28,12 @@ if [ "$EUID" -ne 0 ]; then
 fi
 
 # ------------------------------------------------------------------------------
-# 0. Basis-Tools
+# 0. Aufräumen: Konflikt-Dateien alter Skript-Läufe entfernen (MUSS vor apt!)
+# ------------------------------------------------------------------------------
+rm -f /etc/apt/sources.list.d/influxdb.list /etc/apt/trusted.gpg.d/influxdata.gpg
+
+# ------------------------------------------------------------------------------
+# Basis-Tools
 # ------------------------------------------------------------------------------
 echo ">>> Installiere Basis-Tools ..."
 apt-get update -qq
@@ -42,9 +47,6 @@ python3 -c "import serial, influxdb" && echo ">>> Python-Module OK (pyserial + i
 #    -> nur anlegen, falls nicht vorhanden (Sonst Signed-By-Konflikt!)
 # ------------------------------------------------------------------------------
 echo ">>> Prüfe InfluxData-Repository ..."
-# Alt-Datei eines früheren Skript-Laufs entfernen (verursachte Signed-By-Konflikt):
-rm -f /etc/apt/sources.list.d/influxdb.list /etc/apt/trusted.gpg.d/influxdata.gpg
-apt-get update -qq 2>/dev/null || true
 if ls /etc/apt/sources.list.d/dietpi-influxdb.list >/dev/null 2>&1; then
   echo ">>> DietPi-Repo für InfluxDB existiert bereits - nutze es."
 else
