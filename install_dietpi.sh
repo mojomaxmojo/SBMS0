@@ -37,13 +37,22 @@ apt-get install -y -qq curl gnupg wget python3-serial python3-influxdb
 python3 -c "import serial, influxdb" && echo ">>> Python-Module OK (pyserial + influxdb)"
 
 # ------------------------------------------------------------------------------
-# 1. InfluxDB 1.8 (InfluxData-Repo, dist=bookworm funktioniert auf Trixie)
+# 1. InfluxDB 1.8 (InfluxData-Repo)
+#    DietPi legt das Repo bereits selbst an (/etc/apt/sources.list.d/dietpi-influxdb.list)
+#    -> nur anlegen, falls nicht vorhanden (Sonst Signed-By-Konflikt!)
 # ------------------------------------------------------------------------------
-echo ">>> Richte InfluxData-Repository ein ..."
-curl -fsSL https://repos.influxdata.com/influxdata-archive.key \
-  | gpg --dearmor -o /etc/apt/trusted.gpg.d/influxdata.gpg
-echo "deb [signed-by=/etc/apt/trusted.gpg.d/influxdata.gpg] https://repos.influxdata.com/debian bookworm stable" \
-  > /etc/apt/sources.list.d/influxdb.list
+echo ">>> Prüfe InfluxData-Repository ..."
+# Alt-Datei eines früheren Skript-Laufs entfernen (verursachte Signed-By-Konflikt):
+rm -f /etc/apt/sources.list.d/influxdb.list /etc/apt/trusted.gpg.d/influxdata.gpg
+apt-get update -qq 2>/dev/null || true
+if ls /etc/apt/sources.list.d/dietpi-influxdb.list >/dev/null 2>&1; then
+  echo ">>> DietPi-Repo für InfluxDB existiert bereits - nutze es."
+else
+  curl -fsSL https://repos.influxdata.com/influxdata-archive.key \
+    | gpg --dearmor -o /etc/apt/trusted.gpg.d/influxdata.gpg
+  echo "deb [signed-by=/etc/apt/trusted.gpg.d/influxdata.gpg] https://repos.influxdata.com/debian bookworm stable" \
+    > /etc/apt/sources.list.d/influxdb.list
+fi
 
 apt-get update -qq
 echo ">>> Installiere influxdb (1.8.x) ..."
