@@ -116,6 +116,10 @@ influx -execute "CREATE CONTINUOUS QUERY \"cq_1m\" ON \"SBMS\" BEGIN \
 # LiveLogger: systemd-Unit (python3-serial/python3-influxdb sind via apt da)
 # ------------------------------------------------------------------------------
 echo ">>> [6/6] SBMS-LiveLogger-Dienst einrichten ..."
+# Schreibrechte für den Service-User (CSV-Fallback im Repo-Verzeichnis):
+if [ -d "$SBMS_DIR" ]; then
+  chown -R "$RUN_USER":"$RUN_USER" "$SBMS_DIR"
+fi
 if [ ! -f "$SBMS_DIR/sbms0-LiveLogger.py" ]; then
   echo "WARNUNG: $SBMS_DIR/sbms0-LiveLogger.py nicht gefunden!"
   echo "         Repo klonen:  git clone https://github.com/mojomaxmojo/SBMS0.git $SBMS_DIR"

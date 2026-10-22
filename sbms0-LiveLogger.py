@@ -214,7 +214,7 @@ def main():
     if CSV_FALLBACK:
         import csv
         import os
-        csv_path = os.path.join('/tmp',
+        csv_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                 f'sbms_fallback_{datetime.date.today().isoformat()}.csv')
         csv_file = open(csv_path, 'a', newline='')
         csv_writer = csv.writer(csv_file)
