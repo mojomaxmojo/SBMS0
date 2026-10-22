@@ -81,8 +81,8 @@ apt-get install -y -qq influxdb
 # ------------------------------------------------------------------------------
 echo ">>> Richte Grafana-Repository ein ..."
 curl -fsSL https://apt.grafana.com/gpg.key \
-  | gpg --dearmor -o /etc/apt/trusted.gpg.d/grafana.gpg
-echo "deb [signed-by=/etc/apt/trusted.gpg.d/grafana.gpg] https://apt.grafana.com oss main" \
+  | gpg --dearmor -o /etc/apt/keyrings/grafana.gpg
+echo "deb [signed-by=/etc/apt/keyrings/grafana.gpg] https://apt.grafana.com stable main" \
   > /etc/apt/sources.list.d/grafana.list
 
 apt-get update -qq
