@@ -30,7 +30,8 @@ fi
 # ------------------------------------------------------------------------------
 # 0. Aufräumen: Konflikt-Dateien alter Skript-Läufe entfernen (MUSS vor apt!)
 # ------------------------------------------------------------------------------
-rm -f /etc/apt/sources.list.d/influxdb.list /etc/apt/trusted.gpg.d/influxdata.gpg
+rm -f /etc/apt/sources.list.d/influxdb.list
+rm -f /etc/apt/trusted.gpg.d/influxdata.gpg
 
 # ------------------------------------------------------------------------------
 # Basis-Tools
@@ -43,16 +44,31 @@ python3 -c "import serial, influxdb" && echo ">>> Python-Module OK (pyserial + i
 
 # ------------------------------------------------------------------------------
 # 1. InfluxDB 1.8 (InfluxData-Repo)
-#    DietPi legt das Repo bereits selbst an (/etc/apt/sources.list.d/dietpi-influxdb.list)
-#    -> nur anlegen, falls nicht vorhanden (Sonst Signed-By-Konflikt!)
+#    DietPi legt das Repo bereits selbst an (signed-by=/etc/apt/keyrings/dietpi-influxdb.asc)
+#    -> alle DUPLIKATE mit anderer Key-Datei entfernen (Signed-By-Konflikt!)
 # ------------------------------------------------------------------------------
 echo ">>> Prüfe InfluxData-Repository ..."
-if ls /etc/apt/sources.list.d/dietpi-influxdb.list >/dev/null 2>&1; then
-  echo ">>> DietPi-Repo für InfluxDB existiert bereits - nutze es."
-else
+DIETPI_INFLUX_FOUND=0
+for f in /etc/apt/sources.list.d/*.list /etc/apt/sources.list.d/*.sources; do
+  [ -f "$f" ] || continue
+  if grep -q "repos.influxdata.com" "$f" 2>/dev/null; then
+    if grep -q "dietpi-influxdb" "$f" 2>/dev/null; then
+      echo ">>> DietPi-Repo für InfluxDB gefunden: $f - nutze es."
+      DIETPI_INFLUX_FOUND=1
+    else
+      echo ">>> Entferne doppeltes InfluxDB-Repo: $f (verursachte Signed-By-Konflikt)"
+      rm -f "$f"
+    fi
+  fi
+done
+# Auch verwaiste Key-Dateien unseres Skripts entfernen:
+rm -f /etc/apt/trusted.gpg.d/influxdata.gpg
+
+if [ "$DIETPI_INFLUX_FOUND" -eq 0 ] && ! grep -rqs "repos.influxdata.com" /etc/apt/sources.list 2>/dev/null; then
+  echo ">>> Kein InfluxDB-Repo vorhanden - lege es an ..."
   curl -fsSL https://repos.influxdata.com/influxdata-archive.key \
-    | gpg --dearmor -o /etc/apt/trusted.gpg.d/influxdata.gpg
-  echo "deb [signed-by=/etc/apt/trusted.gpg.d/influxdata.gpg] https://repos.influxdata.com/debian bookworm stable" \
+    | gpg --dearmor -o /etc/apt/keyrings/influxdata.gpg
+  echo "deb [signed-by=/etc/apt/keyrings/influxdata.gpg] https://repos.influxdata.com/debian bookworm stable" \
     > /etc/apt/sources.list.d/influxdb.list
 fi
 
