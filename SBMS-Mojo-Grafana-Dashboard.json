@@ -355,7 +355,7 @@
               "params": [
                 "null"
               ],
-                "type": "fill"
+              "type": "fill"
             }
           ],
           "hide": false,
@@ -398,7 +398,7 @@
               "params": [
                 "null"
               ],
-                "type": "fill"
+              "type": "fill"
             }
           ],
           "orderByTime": "ASC",
@@ -440,7 +440,7 @@
               "params": [
                 "null"
               ],
-                "type": "fill"
+              "type": "fill"
             }
           ],
           "orderByTime": "ASC",
@@ -448,49 +448,6 @@
           "query": "SELECT \"Battery Voltage\" * (\"PV Total Current\"-\"Battery Current\") / 3600 / 1000 FROM \"SBMS_Metrics\" WHERE $timeFilter",
           "rawQuery": true,
           "refId": "B",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": []
-        },
-        {
-          "alias": "Diverted",
-          "datasource": {
-            "type": "influxdb",
-            "uid": "dg20jcsde4wlcd"
-          },
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-                "type": "fill"
-            }
-          ],
-          "hide": true,
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "SELECT \"ADC4\" * \"ADC4\" / 2.16 / 3600 / 1000 FROM \"SBMS_Metrics\" WHERE $timeFilter",
-          "rawQuery": true,
-          "refId": "C",
           "resultFormat": "time_series",
           "select": [
             [
@@ -776,59 +733,6 @@
               "value": "SBMS0a"
             }
           ]
-        },
-        {
-          "alias": "Diversion",
-          "datasource": {
-            "type": "influxdb",
-            "uid": "dg20jcsde4wlcd"
-          },
-          "groupBy": [],
-          "hide": true,
-          "measurement": "SBMS_Metrics",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "SELECT  \"ADC4\" * \"ADC4\" /2.16 FROM \"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter",
-          "rawQuery": true,
-          "refId": "D",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "Battery Voltage"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [
-                  " / 100"
-                ],
-                "type": "math"
-              }
-            ],
-            [
-              {
-                "params": [
-                  "PV Total Current"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [
-                  " / 100"
-                ],
-                "type": "math"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "Name",
-              "operator": "=",
-              "value": "SBMS0a"
-            }
-          ]
         }
       ],
       "title": "Power",
@@ -1010,7 +914,7 @@
               "params": [
                 "null"
               ],
-                "type": "fill"
+              "type": "fill"
             }
           ],
           "orderByTime": "ASC",
@@ -1052,7 +956,7 @@
               "params": [
                 "null"
               ],
-                "type": "fill"
+              "type": "fill"
             }
           ],
           "hide": false,
@@ -1095,7 +999,7 @@
               "params": [
                 "null"
               ],
-                "type": "fill"
+              "type": "fill"
             }
           ],
           "hide": false,
@@ -1211,7 +1115,7 @@
               "params": [
                 "null"
               ],
-                "type": "fill"
+              "type": "fill"
             }
           ],
           "orderByTime": "ASC",
@@ -1253,7 +1157,7 @@
               "params": [
                 "null"
               ],
-                "type": "fill"
+              "type": "fill"
             }
           ],
           "hide": false,
@@ -1296,7 +1200,7 @@
               "params": [
                 "null"
               ],
-                "type": "fill"
+              "type": "fill"
             }
           ],
           "hide": false,
@@ -1413,240 +1317,9 @@
           "measurement": "SBMS_Metrics",
           "orderByTime": "ASC",
           "policy": "raw_1s",
-          "query": "SELECT \"Cell 1\" FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter",
+          "query": "SELECT \"Cell 1\" AS \"Cell1\", \"Cell 2\" AS \"Cell2\", \"Cell 3\" AS \"Cell3\", \"Cell 4\" AS \"Cell4\", \"Cell 5\" AS \"Cell5\", \"Cell 6\" AS \"Cell6\", \"Cell 7\" AS \"Cell7\", \"Cell 8\" AS \"Cell8\" FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter",
           "rawQuery": true,
           "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "Name",
-              "operator": "=",
-              "value": "SBMS0a"
-            }
-          ]
-        },
-        {
-          "alias": "Cell2",
-          "datasource": {
-            "type": "influxdb",
-            "uid": "dg20jcsde4wlcd"
-          },
-          "groupBy": [],
-          "hide": false,
-          "measurement": "SBMS_Metrics",
-          "orderByTime": "ASC",
-          "policy": "raw_1s",
-          "query": "SELECT \"Cell 2\" FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter",
-          "rawQuery": true,
-          "refId": "B",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "Name",
-              "operator": "=",
-              "value": "SBMS0a"
-            }
-          ]
-        },
-        {
-          "alias": "Cell3",
-          "datasource": {
-            "type": "influxdb",
-            "uid": "dg20jcsde4wlcd"
-          },
-          "groupBy": [],
-          "hide": false,
-          "measurement": "SBMS_Metrics",
-          "orderByTime": "ASC",
-          "policy": "raw_1s",
-          "query": "SELECT \"Cell 3\" FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter",
-          "rawQuery": true,
-          "refId": "C",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "Name",
-              "operator": "=",
-              "value": "SBMS0a"
-            }
-          ]
-        },
-        {
-          "alias": "Cell4",
-          "datasource": {
-            "type": "influxdb",
-            "uid": "dg20jcsde4wlcd"
-          },
-          "groupBy": [],
-          "hide": false,
-          "measurement": "SBMS_Metrics",
-          "orderByTime": "ASC",
-          "policy": "raw_1s",
-          "query": "SELECT \"Cell 4\" FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter",
-          "rawQuery": true,
-          "refId": "D",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "Name",
-              "operator": "=",
-              "value": "SBMS0a"
-            }
-          ]
-        },
-        {
-          "alias": "Cell5",
-          "datasource": {
-            "type": "influxdb",
-            "uid": "dg20jcsde4wlcd"
-          },
-          "groupBy": [],
-          "hide": false,
-          "measurement": "SBMS_Metrics",
-          "orderByTime": "ASC",
-          "policy": "raw_1s",
-          "query": "SELECT \"Cell 5\" FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter",
-          "rawQuery": true,
-          "refId": "E",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "Name",
-              "operator": "=",
-              "value": "SBMS0a"
-            }
-          ]
-        },
-        {
-          "alias": "Cell6",
-          "datasource": {
-            "type": "influxdb",
-            "uid": "dg20jcsde4wlcd"
-          },
-          "groupBy": [],
-          "hide": false,
-          "measurement": "SBMS_Metrics",
-          "orderByTime": "ASC",
-          "policy": "raw_1s",
-          "query": "SELECT \"Cell 6\" FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter",
-          "rawQuery": true,
-          "refId": "F",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "Name",
-              "operator": "=",
-              "value": "SBMS0a"
-            }
-          ]
-        },
-        {
-          "alias": "Cell7",
-          "datasource": {
-            "type": "influxdb",
-            "uid": "dg20jcsde4wlcd"
-          },
-          "groupBy": [],
-          "hide": false,
-          "measurement": "SBMS_Metrics",
-          "orderByTime": "ASC",
-          "policy": "raw_1s",
-          "query": "SELECT \"Cell 7\" FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter",
-          "rawQuery": true,
-          "refId": "G",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "Name",
-              "operator": "=",
-              "value": "SBMS0a"
-            }
-          ]
-        },
-        {
-          "alias": "Cell8",
-          "datasource": {
-            "type": "influxdb",
-            "uid": "dg20jcsde4wlcd"
-          },
-          "groupBy": [],
-          "hide": false,
-          "measurement": "SBMS_Metrics",
-          "orderByTime": "ASC",
-          "policy": "raw_1s",
-          "query": "SELECT \"Cell 8\" FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter",
-          "rawQuery": true,
-          "refId": "H",
           "resultFormat": "time_series",
           "select": [
             [
@@ -2004,39 +1677,6 @@
           ]
         },
         {
-          "alias": "Diversion",
-          "datasource": {
-            "type": "influxdb",
-            "uid": "dg20jcsde4wlcd"
-          },
-          "groupBy": [],
-          "hide": true,
-          "measurement": "SBMS_Metrics",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "SELECT \"ADC4\" * \"ADC4\" / 2.16 FROM \"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter",
-          "rawQuery": true,
-          "refId": "C",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "PV Total Current"
-                ],
-                "type": "field"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "Name",
-              "operator": "=",
-              "value": "SBMS0a"
-            }
-          ]
-        },
-        {
           "alias": "Battery",
           "datasource": {
             "type": "influxdb",
@@ -2223,9 +1863,9 @@
               "params": [
                 "null"
               ],
-                "type": "fill"
-              }
-            ],
+              "type": "fill"
+            }
+          ],
           "measurement": "SBMS_Metrics",
           "orderByTime": "ASC",
           "policy": "raw_1s",
@@ -2272,9 +1912,9 @@
               "params": [
                 "null"
               ],
-                "type": "fill"
-              }
-            ],
+              "type": "fill"
+            }
+          ],
           "measurement": "SBMS_Metrics",
           "orderByTime": "ASC",
           "policy": "raw_1s",
