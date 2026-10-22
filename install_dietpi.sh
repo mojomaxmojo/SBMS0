@@ -116,6 +116,10 @@ influx -execute "CREATE CONTINUOUS QUERY \"cq_1m\" ON \"SBMS\" BEGIN \
 # LiveLogger: systemd-Unit (python3-serial/python3-influxdb sind via apt da)
 # ------------------------------------------------------------------------------
 echo ">>> [6/6] SBMS-LiveLogger-Dienst einrichten ..."
+# Service-User braucht Zugriff auf den Serial-Port (/dev/ttyUSB0):
+if id "$RUN_USER" &>/dev/null; then
+  usermod -aG dialout "$RUN_USER" && echo "    $RUN_USER zur Gruppe dialout hinzugefügt"
+fi
 # Schreibrechte für den Service-User (CSV-Fallback im Repo-Verzeichnis):
 if [ -d "$SBMS_DIR" ]; then
   chown -R "$RUN_USER":"$RUN_USER" "$SBMS_DIR"
