@@ -72,6 +72,15 @@ def parse_line(line):
     active = [v for v in cells if v > 0]
     delta = (max(active) - min(active)) if active else 0.0
 
+    # Plausibilitätsprüfung: fängt Serial-Sync-Probleme ab (Zeilen mitten drin begonnen)
+    # SBMS0 (8s LiFePO4): Spannung 8x2.5=20V bis 8x3.65=29.2V, Zellen 0-5V, SOC 0-100
+    if not (10.0 <= Battery_voltage <= 60.0):
+        raise ValueError(f'Battery Voltage unplausible: {Battery_voltage}')
+    if not (0.0 <= SOC <= 100.0):
+        raise ValueError(f'SOC unplausible: {SOC}')
+    if any(v < 0.0 or v > 5.0 for v in cells):
+        raise ValueError('Cell voltage out of range')
+
     # Flags (siehe SBMS0-Dokumentation)
     flag_defs = [
         (16384, 'DFET'), (8192, 'EOC'), (4096, 'CFET'), (2048, 'ECCF'),
@@ -255,7 +264,7 @@ def main():
                 except (serial.SerialException, OSError):
                     continue
             except (IndexError, ValueError):
-                pass  # kaputte Zeile -> ignorieren
+                pass  # unplausible/kaputte Zeile -> verwerfen (kein Schreiben in DB!)
 
             # --- Alle LOG_INTERVAL Sekunden: InfluxDB schreiben + anzeigen ---
             if now - last_log >= LOG_INTERVAL:
