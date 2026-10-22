@@ -102,13 +102,13 @@ systemctl enable --now influxdb
 sleep 5
 
 echo ">>> [5/6] Datenbank SBMS + Retention (1 Jahr) + Downsampling (1 min) ..."
-influx -execute "CREATE DATABASE SBMS WITH DURATION 365d REPLICATION 1" 2>/dev/null \
+influx -database SBMS -execute "CREATE DATABASE SBMS WITH DURATION 365d REPLICATION 1" 2>/dev/null \
   && echo "    DB angelegt" || echo "    DB existiert bereits - ok"
-influx -execute "CREATE RETENTION POLICY \"raw_1s\" ON \"SBMS\" DURATION 365d REPLICATION 1 DEFAULT" 2>/dev/null \
+influx -database SBMS -execute "CREATE RETENTION POLICY \"raw_1s\" ON \"SBMS\" DURATION 365d REPLICATION 1 DEFAULT" 2>/dev/null \
   && echo "    Retention raw_1s angelegt" || echo "    Retention raw_1s existiert bereits - ok"
-influx -execute "CREATE RETENTION POLICY \"downsampled_1m\" ON \"SBMS\" DURATION 365d REPLICATION 1" 2>/dev/null \
+influx -database SBMS -execute "CREATE RETENTION POLICY \"downsampled_1m\" ON \"SBMS\" DURATION 365d REPLICATION 1" 2>/dev/null \
   && echo "    Retention downsampled_1m angelegt" || echo "    Retention downsampled_1m existiert bereits - ok"
-influx -execute "CREATE CONTINUOUS QUERY \"cq_1m\" ON \"SBMS\" BEGIN \
+influx -database SBMS -execute "CREATE CONTINUOUS QUERY \"cq_1m\" ON \"SBMS\" BEGIN \
   SELECT mean(*) INTO \"downsampled_1m\".\"SBMS_Metrics\" FROM \"SBMS_Metrics\" GROUP BY time(1m), * END" 2>/dev/null \
   && echo "    Continuous Query angelegt" || echo "    Continuous Query existiert bereits - ok"
 
@@ -120,6 +120,8 @@ echo ">>> [6/6] SBMS-LiveLogger-Dienst einrichten ..."
 if id "$RUN_USER" &>/dev/null; then
   usermod -aG dialout "$RUN_USER" && echo "    $RUN_USER zur Gruppe dialout hinzugefügt"
 fi
+# Git: root darf das dem dietpi gehörende Repo verwalten:
+git config --global --add safe.directory "$SBMS_DIR" 2>/dev/null || true
 # Schreibrechte für den Service-User (CSV-Fallback im Repo-Verzeichnis):
 if [ -d "$SBMS_DIR" ]; then
   chown -R "$RUN_USER":"$RUN_USER" "$SBMS_DIR"
