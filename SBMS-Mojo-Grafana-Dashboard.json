@@ -1465,7 +1465,7 @@
         "type": "influxdb",
         "uid": "dg20jcsde4wlcd"
       },
-      "description": "Aggregated via $__interval - performant with large time ranges",
+      "description": "Live power (raw points, maxDataPoints 500)",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1618,45 +1618,15 @@
             "type": "influxdb",
             "uid": "dg20jcsde4wlcd"
           },
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
+          "groupBy": [],
           "measurement": "SBMS_Metrics",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT mean(\"val\") AS \"PV power\" FROM (SELECT \"PV Total Current\" * \"Battery Voltage\" AS \"val\" FROM \"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter GROUP BY time($__interval) fill(null)) WHERE $timeFilter",
+          "query": "SELECT \"PV Total Current\" * \"Battery Voltage\" FROM \"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "PV Total Current"
-                ],
-                "type": "field"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "Name",
-              "operator": "=",
-              "value": "SBMS0a"
-            }
-          ],
-          "maxDataPoints": 1000
+          "maxDataPoints": 500
         },
         {
           "alias": "Consumption",
@@ -1664,45 +1634,15 @@
             "type": "influxdb",
             "uid": "dg20jcsde4wlcd"
           },
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
+          "groupBy": [],
           "measurement": "SBMS_Metrics",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT mean(\"val\") AS \"Consumption\" FROM (SELECT (\"PV Total Current\"-\"Battery Current\") * \"Battery Voltage\" AS \"val\" FROM \"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter GROUP BY time($__interval) fill(null)) WHERE $timeFilter",
+          "query": "SELECT (\"PV Total Current\"-\"Battery Current\") * \"Battery Voltage\" FROM \"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter",
           "rawQuery": true,
           "refId": "B",
           "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "PV Total Current"
-                ],
-                "type": "field"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "Name",
-              "operator": "=",
-              "value": "SBMS0a"
-            }
-          ],
-          "maxDataPoints": 1000
+          "maxDataPoints": 500
         },
         {
           "alias": "Battery",
@@ -1710,45 +1650,15 @@
             "type": "influxdb",
             "uid": "dg20jcsde4wlcd"
           },
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
+          "groupBy": [],
           "measurement": "SBMS_Metrics",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT mean(\"val\") AS \"Battery\" FROM (SELECT \"Battery Current\" * \"Battery Voltage\" AS \"val\" FROM \"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter GROUP BY time($__interval) fill(null)) WHERE $timeFilter",
+          "query": "SELECT \"Battery Current\" * \"Battery Voltage\" FROM \"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter",
           "rawQuery": true,
           "refId": "D",
           "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "PV Total Current"
-                ],
-                "type": "field"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "Name",
-              "operator": "=",
-              "value": "SBMS0a"
-            }
-          ],
-          "maxDataPoints": 1000
+          "maxDataPoints": 500
         }
       ],
       "title": "Energy flow",
