@@ -29,12 +29,49 @@ fi
 # TEIL 1 - ALLE PAKETE VIA APT
 # ------------------------------------------------------------------------------
 
-# --- Repositories (Grafana; InfluxDB kommt aus dem DietPi-eigenen Repo) -------
-echo ">>> [1/6] Grafana-Repository einrichten ..."
-curl -fsSL https://apt.grafana.com/gpg.key \
-  | gpg --dearmor -o /etc/apt/keyrings/grafana.gpg
-echo "deb [signed-by=/etc/apt/keyrings/grafana.gpg] https://apt.grafana.com stable main" \
-  > /etc/apt/sources.list.d/grafana.list
+# --- Repositories: DietPi bringt InfluxDB- UND Grafana-Repo bereits mit -------
+echo ">>> [1/6] Prüfe Repositories (DietPi-Repo behalten, Duplikate entfernen) ..."
+for f in /etc/apt/sources.list.d/*.list /etc/apt/sources.list.d/*.sources; do
+  [ -f "$f" ] || continue
+  # InfluxDB-Repo:
+  if grep -q "repos.influxdata.com" "$f" 2>/dev/null; then
+    if grep -q "dietpi-influxdb" "$f" 2>/dev/null; then
+      echo "    DietPi-InfluxDB-Repo gefunden: $f - ok"
+      DIETPI_INFLUX=1
+    else
+      echo "    Entferne doppeltes InfluxDB-Repo: $f"
+      rm -f "$f"
+    fi
+  fi
+  # Grafana-Repo:
+  if grep -q "apt.grafana.com" "$f" 2>/dev/null; then
+    if grep -q "dietpi-grafana" "$f" 2>/dev/null; then
+      echo "    DietPi-Grafana-Repo gefunden: $f - ok"
+      DIETPI_GRAFANA=1
+    else
+      echo "    Entferne doppeltes Grafana-Repo: $f"
+      rm -f "$f"
+    fi
+  fi
+done
+# Verwaiste Keys alter Skript-Läufe entfernen:
+rm -f /etc/apt/trusted.gpg.d/influxdata.gpg /etc/apt/keyrings/grafana.gpg /etc/apt/keyrings/influxdata.gpg
+
+# Fallback: Falls kein Repo existiert (z. B. reines Debian ohne DietPi), anlegen:
+if [ -z "$DIETPI_INFLUX" ] && ! grep -rqs "repos.influxdata.com" /etc/apt/sources.list 2>/dev/null; then
+  echo "    Lege InfluxData-Repo an ..."
+  curl -fsSL https://repos.influxdata.com/influxdata-archive.key \
+    | gpg --dearmor -o /etc/apt/keyrings/influxdata.gpg
+  echo "deb [signed-by=/etc/apt/keyrings/influxdata.gpg] https://repos.influxdata.com/debian bookworm stable" \
+    > /etc/apt/sources.list.d/influxdb.list
+fi
+if [ -z "$DIETPI_GRAFANA" ] && ! grep -rqs "apt.grafana.com" /etc/apt/sources.list 2>/dev/null; then
+  echo "    Lege Grafana-Repo an ..."
+  curl -fsSL https://apt.grafana.com/gpg.key \
+    | gpg --dearmor -o /etc/apt/keyrings/grafana.gpg
+  echo "deb [signed-by=/etc/apt/keyrings/grafana.gpg] https://apt.grafana.com stable main" \
+    > /etc/apt/sources.list.d/grafana.list
+fi
 
 echo ">>> [2/6] apt update ..."
 apt-get update -qq
