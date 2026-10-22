@@ -44,7 +44,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "c7a083c1-e4c2-46b3-aad5-d122223582ec"
+        "uid": "dg20jcsde4wlcd"
       },
       "fieldConfig": {
         "defaults": {
@@ -128,7 +128,7 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "c7a083c1-e4c2-46b3-aad5-d122223582ec"
+            "uid": "dg20jcsde4wlcd"
           },
           "groupBy": [],
           "measurement": "SBMS_Metrics",
@@ -163,7 +163,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "c7a083c1-e4c2-46b3-aad5-d122223582ec"
+        "uid": "dg20jcsde4wlcd"
       },
       "fieldConfig": {
         "defaults": {
@@ -300,7 +300,7 @@
           "alias": "Erzeugt",
           "datasource": {
             "type": "influxdb",
-            "uid": "c7a083c1-e4c2-46b3-aad5-d122223582ec"
+            "uid": "dg20jcsde4wlcd"
           },
           "groupBy": [
             {
@@ -342,7 +342,7 @@
           "alias": "Geladen",
           "datasource": {
             "type": "influxdb",
-            "uid": "c7a083c1-e4c2-46b3-aad5-d122223582ec"
+            "uid": "dg20jcsde4wlcd"
           },
           "groupBy": [
             {
@@ -385,7 +385,7 @@
           "alias": "Entladen",
           "datasource": {
             "type": "influxdb",
-            "uid": "c7a083c1-e4c2-46b3-aad5-d122223582ec"
+            "uid": "dg20jcsde4wlcd"
           },
           "groupBy": [
             {
@@ -427,7 +427,7 @@
           "alias": "Verbraucht",
           "datasource": {
             "type": "influxdb",
-            "uid": "c7a083c1-e4c2-46b3-aad5-d122223582ec"
+            "uid": "dg20jcsde4wlcd"
           },
           "groupBy": [
             {
@@ -469,7 +469,7 @@
           "alias": "Diverted",
           "datasource": {
             "type": "influxdb",
-            "uid": "c7a083c1-e4c2-46b3-aad5-d122223582ec"
+            "uid": "dg20jcsde4wlcd"
           },
           "groupBy": [
             {
@@ -515,7 +515,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "c7a083c1-e4c2-46b3-aad5-d122223582ec"
+        "uid": "dg20jcsde4wlcd"
       },
       "fieldConfig": {
         "defaults": {
@@ -625,7 +625,7 @@
           "alias": "PV",
           "datasource": {
             "type": "influxdb",
-            "uid": "c7a083c1-e4c2-46b3-aad5-d122223582ec"
+            "uid": "dg20jcsde4wlcd"
           },
           "groupBy": [],
           "measurement": "SBMS_Metrics",
@@ -677,7 +677,7 @@
           "alias": "Battery",
           "datasource": {
             "type": "influxdb",
-            "uid": "c7a083c1-e4c2-46b3-aad5-d122223582ec"
+            "uid": "dg20jcsde4wlcd"
           },
           "groupBy": [],
           "measurement": "SBMS_Metrics",
@@ -729,7 +729,7 @@
           "alias": "Verbrauch",
           "datasource": {
             "type": "influxdb",
-            "uid": "c7a083c1-e4c2-46b3-aad5-d122223582ec"
+            "uid": "dg20jcsde4wlcd"
           },
           "groupBy": [],
           "measurement": "SBMS_Metrics",
@@ -781,7 +781,7 @@
           "alias": "Diversion",
           "datasource": {
             "type": "influxdb",
-            "uid": "c7a083c1-e4c2-46b3-aad5-d122223582ec"
+            "uid": "dg20jcsde4wlcd"
           },
           "groupBy": [],
           "hide": true,
@@ -838,7 +838,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "c7a083c1-e4c2-46b3-aad5-d122223582ec"
+        "uid": "dg20jcsde4wlcd"
       },
       "fieldConfig": {
         "defaults": {
@@ -889,7 +889,7 @@
           "alias": "Flags",
           "datasource": {
             "type": "influxdb",
-            "uid": "c7a083c1-e4c2-46b3-aad5-d122223582ec"
+            "uid": "dg20jcsde4wlcd"
           },
           "groupBy": [],
           "measurement": "SBMS_Metrics",
@@ -928,7 +928,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "c7a083c1-e4c2-46b3-aad5-d122223582ec"
+        "uid": "dg20jcsde4wlcd"
       },
       "fieldConfig": {
         "defaults": {
@@ -997,7 +997,7 @@
           "alias": "Current",
           "datasource": {
             "type": "influxdb",
-            "uid": "c7a083c1-e4c2-46b3-aad5-d122223582ec"
+            "uid": "dg20jcsde4wlcd"
           },
           "groupBy": [
             {
@@ -1039,7 +1039,7 @@
           "alias": "Last 15m",
           "datasource": {
             "type": "influxdb",
-            "uid": "c7a083c1-e4c2-46b3-aad5-d122223582ec"
+            "uid": "dg20jcsde4wlcd"
           },
           "groupBy": [
             {
@@ -1082,7 +1082,7 @@
           "alias": "Last 1h",
           "datasource": {
             "type": "influxdb",
-            "uid": "c7a083c1-e4c2-46b3-aad5-d122223582ec"
+            "uid": "dg20jcsde4wlcd"
           },
           "groupBy": [
             {
@@ -1128,7 +1128,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "c7a083c1-e4c2-46b3-aad5-d122223582ec"
+        "uid": "dg20jcsde4wlcd"
       },
       "fieldConfig": {
         "defaults": {
@@ -1198,7 +1198,7 @@
           "alias": "Current",
           "datasource": {
             "type": "influxdb",
-            "uid": "c7a083c1-e4c2-46b3-aad5-d122223582ec"
+            "uid": "dg20jcsde4wlcd"
           },
           "groupBy": [
             {
@@ -1240,7 +1240,7 @@
           "alias": "Last 1h",
           "datasource": {
             "type": "influxdb",
-            "uid": "c7a083c1-e4c2-46b3-aad5-d122223582ec"
+            "uid": "dg20jcsde4wlcd"
           },
           "groupBy": [
             {
@@ -1283,7 +1283,7 @@
           "alias": "Last 24h",
           "datasource": {
             "type": "influxdb",
-            "uid": "c7a083c1-e4c2-46b3-aad5-d122223582ec"
+            "uid": "dg20jcsde4wlcd"
           },
           "groupBy": [
             {
@@ -1329,7 +1329,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "c7a083c1-e4c2-46b3-aad5-d122223582ec"
+        "uid": "dg20jcsde4wlcd"
       },
       "fieldConfig": {
         "defaults": {
@@ -1406,7 +1406,7 @@
           "alias": "Cell1",
           "datasource": {
             "type": "influxdb",
-            "uid": "c7a083c1-e4c2-46b3-aad5-d122223582ec"
+            "uid": "dg20jcsde4wlcd"
           },
           "groupBy": [],
           "hide": false,
@@ -1439,7 +1439,7 @@
           "alias": "Cell2",
           "datasource": {
             "type": "influxdb",
-            "uid": "c7a083c1-e4c2-46b3-aad5-d122223582ec"
+            "uid": "dg20jcsde4wlcd"
           },
           "groupBy": [],
           "hide": false,
@@ -1472,7 +1472,7 @@
           "alias": "Cell3",
           "datasource": {
             "type": "influxdb",
-            "uid": "c7a083c1-e4c2-46b3-aad5-d122223582ec"
+            "uid": "dg20jcsde4wlcd"
           },
           "groupBy": [],
           "hide": false,
@@ -1505,7 +1505,7 @@
           "alias": "Cell4",
           "datasource": {
             "type": "influxdb",
-            "uid": "c7a083c1-e4c2-46b3-aad5-d122223582ec"
+            "uid": "dg20jcsde4wlcd"
           },
           "groupBy": [],
           "hide": false,
@@ -1538,7 +1538,7 @@
           "alias": "Cell5",
           "datasource": {
             "type": "influxdb",
-            "uid": "c7a083c1-e4c2-46b3-aad5-d122223582ec"
+            "uid": "dg20jcsde4wlcd"
           },
           "groupBy": [],
           "hide": false,
@@ -1571,7 +1571,7 @@
           "alias": "Cell6",
           "datasource": {
             "type": "influxdb",
-            "uid": "c7a083c1-e4c2-46b3-aad5-d122223582ec"
+            "uid": "dg20jcsde4wlcd"
           },
           "groupBy": [],
           "hide": false,
@@ -1604,7 +1604,7 @@
           "alias": "Cell7",
           "datasource": {
             "type": "influxdb",
-            "uid": "c7a083c1-e4c2-46b3-aad5-d122223582ec"
+            "uid": "dg20jcsde4wlcd"
           },
           "groupBy": [],
           "hide": false,
@@ -1637,7 +1637,7 @@
           "alias": "Cell8",
           "datasource": {
             "type": "influxdb",
-            "uid": "c7a083c1-e4c2-46b3-aad5-d122223582ec"
+            "uid": "dg20jcsde4wlcd"
           },
           "groupBy": [],
           "hide": false,
@@ -1674,7 +1674,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "c7a083c1-e4c2-46b3-aad5-d122223582ec"
+        "uid": "dg20jcsde4wlcd"
       },
       "description": "",
       "fieldConfig": {
@@ -1731,7 +1731,7 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "c7a083c1-e4c2-46b3-aad5-d122223582ec"
+            "uid": "dg20jcsde4wlcd"
           },
           "groupBy": [
             {
@@ -1790,7 +1790,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "c7a083c1-e4c2-46b3-aad5-d122223582ec"
+        "uid": "dg20jcsde4wlcd"
       },
       "description": "",
       "fieldConfig": {
@@ -1943,7 +1943,7 @@
           "alias": "PV power",
           "datasource": {
             "type": "influxdb",
-            "uid": "c7a083c1-e4c2-46b3-aad5-d122223582ec"
+            "uid": "dg20jcsde4wlcd"
           },
           "groupBy": [],
           "measurement": "SBMS_Metrics",
@@ -1975,7 +1975,7 @@
           "alias": "Consumption",
           "datasource": {
             "type": "influxdb",
-            "uid": "c7a083c1-e4c2-46b3-aad5-d122223582ec"
+            "uid": "dg20jcsde4wlcd"
           },
           "groupBy": [],
           "measurement": "SBMS_Metrics",
@@ -2007,7 +2007,7 @@
           "alias": "Diversion",
           "datasource": {
             "type": "influxdb",
-            "uid": "c7a083c1-e4c2-46b3-aad5-d122223582ec"
+            "uid": "dg20jcsde4wlcd"
           },
           "groupBy": [],
           "hide": true,
@@ -2040,7 +2040,7 @@
           "alias": "Battery",
           "datasource": {
             "type": "influxdb",
-            "uid": "c7a083c1-e4c2-46b3-aad5-d122223582ec"
+            "uid": "dg20jcsde4wlcd"
           },
           "groupBy": [],
           "measurement": "SBMS_Metrics",
@@ -2089,7 +2089,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "c7a083c1-e4c2-46b3-aad5-d122223582ec"
+        "uid": "dg20jcsde4wlcd"
       },
       "fieldConfig": {
         "defaults": {
@@ -2210,7 +2210,7 @@
           "alias": "Voltage",
           "datasource": {
             "type": "influxdb",
-            "uid": "c7a083c1-e4c2-46b3-aad5-d122223582ec"
+            "uid": "dg20jcsde4wlcd"
           },
           "groupBy": [
             {
@@ -2259,7 +2259,7 @@
           "alias": "SOC",
           "datasource": {
             "type": "influxdb",
-            "uid": "c7a083c1-e4c2-46b3-aad5-d122223582ec"
+            "uid": "dg20jcsde4wlcd"
           },
           "groupBy": [
             {
@@ -2308,7 +2308,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "c7a083c1-e4c2-46b3-aad5-d122223582ec"
+        "uid": "dg20jcsde4wlcd"
       },
       "fieldConfig": {
         "defaults": {
@@ -2403,7 +2403,7 @@
           "alias": "Internal Temperature",
           "datasource": {
             "type": "influxdb",
-            "uid": "c7a083c1-e4c2-46b3-aad5-d122223582ec"
+            "uid": "dg20jcsde4wlcd"
           },
           "groupBy": [
             {
