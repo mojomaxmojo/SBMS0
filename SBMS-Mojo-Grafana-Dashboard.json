@@ -2450,7 +2450,7 @@
     }
   ],
   "preload": false,
-  "refresh": "5s",
+  "refresh": "1s",
   "schemaVersion": 42,
   "tags": [
     "sbms",
