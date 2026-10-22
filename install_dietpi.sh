@@ -2,16 +2,14 @@
 # ==============================================================================
 # SBMS0-Stack Installer für DietPi (Debian Trixie) auf Dell Wyse 3040
 #
-# Installiert ALLES via apt:
-#   1. InfluxDB 1.8   (InfluxData-Repo) + Datenbank "SBMS"
-#                      inkl. Retention (1 Jahr) + Downsampling (Continuous Query)
-#   2. Grafana        (Grafana-Repo, aktuelle Version, z. Zt. 13.x)
-#   3. Python-Pakete  (python3-serial, python3-influxdb) via Debian-Repo
-#   4. sbms0-LiveLogger.py als systemd-Dienst (Autostart, 1 Hz Logging)
-#   5. Grafana-Datasource via API
+# Struktur:
+#   TEIL 1: ALLE Pakete via apt (Abhängigkeiten inklusive)
+#   TEIL 2: Dienste anlegen (Datenbank, Logger-Unit, Grafana-Config)
+#
+# Idempotent: kann mehrfach ausgeführt werden.
+# Updates später:  sudo apt update && sudo apt upgrade
 #
 # Aufruf:   sudo ./install_dietpi.sh
-# Vorher:   SBMS0-USB-Serial-Adapter einstecken
 # ==============================================================================
 set -e
 
@@ -19,7 +17,7 @@ SBMS_DIR="/home/SBMS0"
 RUN_USER="dietpi"
 
 echo "=============================================================="
-echo " SBMS0-Stack Installation (APT) - DietPi / Debian Trixie"
+echo " SBMS0-Stack Installation - Teil 1: PAKETE (apt)"
 echo "=============================================================="
 
 if [ "$EUID" -ne 0 ]; then
@@ -28,91 +26,63 @@ if [ "$EUID" -ne 0 ]; then
 fi
 
 # ------------------------------------------------------------------------------
-# 0. Aufräumen: Konflikt-Dateien alter Skript-Läufe entfernen (MUSS vor apt!)
+# TEIL 1 - ALLE PAKETE VIA APT
 # ------------------------------------------------------------------------------
-rm -f /etc/apt/sources.list.d/influxdb.list
-rm -f /etc/apt/trusted.gpg.d/influxdata.gpg
 
-# ------------------------------------------------------------------------------
-# Basis-Tools
-# ------------------------------------------------------------------------------
-echo ">>> Installiere Basis-Tools ..."
-apt-get update -qq
-apt-get install -y -qq curl gnupg wget python3-serial python3-influxdb
-
-python3 -c "import serial, influxdb" && echo ">>> Python-Module OK (pyserial + influxdb)"
-
-# ------------------------------------------------------------------------------
-# 1. InfluxDB 1.8 (InfluxData-Repo)
-#    DietPi legt das Repo bereits selbst an (signed-by=/etc/apt/keyrings/dietpi-influxdb.asc)
-#    -> alle DUPLIKATE mit anderer Key-Datei entfernen (Signed-By-Konflikt!)
-# ------------------------------------------------------------------------------
-echo ">>> Prüfe InfluxData-Repository ..."
-DIETPI_INFLUX_FOUND=0
-for f in /etc/apt/sources.list.d/*.list /etc/apt/sources.list.d/*.sources; do
-  [ -f "$f" ] || continue
-  if grep -q "repos.influxdata.com" "$f" 2>/dev/null; then
-    if grep -q "dietpi-influxdb" "$f" 2>/dev/null; then
-      echo ">>> DietPi-Repo für InfluxDB gefunden: $f - nutze es."
-      DIETPI_INFLUX_FOUND=1
-    else
-      echo ">>> Entferne doppeltes InfluxDB-Repo: $f (verursachte Signed-By-Konflikt)"
-      rm -f "$f"
-    fi
-  fi
-done
-# Auch verwaiste Key-Dateien unseres Skripts entfernen:
-rm -f /etc/apt/trusted.gpg.d/influxdata.gpg
-
-if [ "$DIETPI_INFLUX_FOUND" -eq 0 ] && ! grep -rqs "repos.influxdata.com" /etc/apt/sources.list 2>/dev/null; then
-  echo ">>> Kein InfluxDB-Repo vorhanden - lege es an ..."
-  curl -fsSL https://repos.influxdata.com/influxdata-archive.key \
-    | gpg --dearmor -o /etc/apt/keyrings/influxdata.gpg
-  echo "deb [signed-by=/etc/apt/keyrings/influxdata.gpg] https://repos.influxdata.com/debian bookworm stable" \
-    > /etc/apt/sources.list.d/influxdb.list
-fi
-
-apt-get update -qq
-echo ">>> Installiere influxdb (1.8.x) ..."
-apt-get install -y -qq influxdb
-
-# ------------------------------------------------------------------------------
-# 2. Grafana (offizielles Grafana-Repo)
-# ------------------------------------------------------------------------------
-echo ">>> Richte Grafana-Repository ein ..."
+# --- Repositories (Grafana; InfluxDB kommt aus dem DietPi-eigenen Repo) -------
+echo ">>> [1/6] Grafana-Repository einrichten ..."
 curl -fsSL https://apt.grafana.com/gpg.key \
   | gpg --dearmor -o /etc/apt/keyrings/grafana.gpg
 echo "deb [signed-by=/etc/apt/keyrings/grafana.gpg] https://apt.grafana.com stable main" \
   > /etc/apt/sources.list.d/grafana.list
 
+echo ">>> [2/6] apt update ..."
 apt-get update -qq
-echo ">>> Installiere grafana (aktuelle Version) ..."
-apt-get install -y -qq grafana
+
+echo ">>> [3/6] Installiere ALLE Pakete (InfluxDB, Grafana, Python, Tools) ..."
+apt-get install -y -qq \
+  influxdb \
+  grafana \
+  python3-serial \
+  python3-influxdb \
+  curl gnupg wget tar
+
+# --- Prüfung der Python-Module (Abhängigkeit des LiveLoggers) ------------------
+python3 -c "import serial, influxdb" \
+  && echo ">>> Python-Module OK (pyserial + influxdb)" \
+  || { echo "FEHLER: Python-Module fehlen!"; exit 1; }
+
+echo ""
+echo "=============================================================="
+echo " SBMS0-Stack Installation - Teil 2: DIENSTE"
+echo "=============================================================="
 
 # ------------------------------------------------------------------------------
-# 3. Datenbank anlegen: SBMS + Retention 1 Jahr + Downsampling
+# InfluxDB: Dienst + Datenbank + Retention + Downsampling
 # ------------------------------------------------------------------------------
-echo ">>> Starte InfluxDB ..."
-systemctl enable influxdb
-systemctl start influxdb
+echo ">>> [4/6] InfluxDB-Dienst starten ..."
+systemctl enable --now influxdb
 sleep 5
 
-echo ">>> Erstelle Datenbank SBMS + Retention + Downsampling ..."
-influx -execute "CREATE DATABASE SBMS WITH DURATION 365d REPLICATION 1"
-influx -execute "CREATE RETENTION POLICY \"raw_1s\" ON \"SBMS\" DURATION 365d REPLICATION 1 DEFAULT"
-influx -execute "CREATE RETENTION POLICY \"downsampled_1m\" ON \"SBMS\" DURATION 365d REPLICATION 1"
+echo ">>> [5/6] Datenbank SBMS + Retention (1 Jahr) + Downsampling (1 min) ..."
+influx -execute "CREATE DATABASE SBMS WITH DURATION 365d REPLICATION 1" 2>/dev/null \
+  && echo "    DB angelegt" || echo "    DB existiert bereits - ok"
+influx -execute "CREATE RETENTION POLICY \"raw_1s\" ON \"SBMS\" DURATION 365d REPLICATION 1 DEFAULT" 2>/dev/null \
+  && echo "    Retention raw_1s angelegt" || echo "    Retention raw_1s existiert bereits - ok"
+influx -execute "CREATE RETENTION POLICY \"downsampled_1m\" ON \"SBMS\" DURATION 365d REPLICATION 1" 2>/dev/null \
+  && echo "    Retention downsampled_1m angelegt" || echo "    Retention downsampled_1m existiert bereits - ok"
 influx -execute "CREATE CONTINUOUS QUERY \"cq_1m\" ON \"SBMS\" BEGIN \
-  SELECT mean(*) INTO \"downsampled_1m\".\"SBMS_Metrics\" FROM \"SBMS_Metrics\" GROUP BY time(1m), * END" \
-  || echo "Hinweis: Continuous Query existiert evtl. schon - ignoriert."
+  SELECT mean(*) INTO \"downsampled_1m\".\"SBMS_Metrics\" FROM \"SBMS_Metrics\" GROUP BY time(1m), * END" 2>/dev/null \
+  && echo "    Continuous Query angelegt" || echo "    Continuous Query existiert bereits - ok"
 
 # ------------------------------------------------------------------------------
-# 4. LiveLogger als systemd-Dienst
+# LiveLogger: systemd-Unit (python3-serial/python3-influxdb sind via apt da)
 # ------------------------------------------------------------------------------
-echo ">>> Richte SBMS-LiveLogger-Dienst ein ..."
+echo ">>> [6/6] SBMS-LiveLogger-Dienst einrichten ..."
 if [ ! -f "$SBMS_DIR/sbms0-LiveLogger.py" ]; then
-  echo "FEHLER: $SBMS_DIR/sbms0-LiveLogger.py nicht gefunden!"
-  echo "Repo korrekt geklont?  (git clone https://github.com/mojomaxmojo/SBMS0.git /home/SBMS0)"
-  exit 1
+  echo "WARNUNG: $SBMS_DIR/sbms0-LiveLogger.py nicht gefunden!"
+  echo "         Repo klonen:  git clone https://github.com/mojomaxmojo/SBMS0.git $SBMS_DIR"
+  echo "         (Logger-Dienst wird trotzdem eingerichtet, startet erst mit Datei.)"
 fi
 
 cat > /etc/systemd/system/SBMS-LiveLogger.service <<EOF
@@ -126,8 +96,6 @@ User=${RUN_USER}
 ExecStart=/usr/bin/python3 ${SBMS_DIR}/sbms0-LiveLogger.py
 Restart=always
 RestartSec=10
-StandardOutput=journal
-StandardError=journal
 SyslogIdentifier=SBMS
 
 [Install]
@@ -136,54 +104,44 @@ EOF
 
 systemctl daemon-reload
 systemctl enable SBMS-LiveLogger
+if [ -e /dev/ttyUSB0 ]; then
+  systemctl restart SBMS-LiveLogger
+  echo "    Logger gestartet (/dev/ttyUSB0 gefunden)"
+else
+  echo "    Hinweis: /dev/ttyUSB0 nicht da - Logger startet beim nächsten Boot / nach Einstecken:"
+  echo "             systemctl start SBMS-LiveLogger"
+fi
 
 # ------------------------------------------------------------------------------
-# 5. Grafana starten
+# Grafana: 1s-Refresh freischalten + Dienst + Datasource
 # ------------------------------------------------------------------------------
 echo ">>> Grafana: 1s-Refresh freischalten ..."
-# Grafana begrenzt Refresh standardmäßig auf min 5s -> auf 1s lockern:
 if ! grep -q "^min_refresh_interval" /etc/grafana/grafana.ini 2>/dev/null; then
   printf '\n[panels]\nmin_refresh_interval = 1s\n' >> /etc/grafana/grafana.ini
 fi
 
-echo ">>> Starte Grafana ..."
-systemctl enable grafana-server
+systemctl enable --now grafana-server
 systemctl restart grafana-server
-
-# ------------------------------------------------------------------------------
-# 6. Grafana-Datasource automatisch anlegen
-# ------------------------------------------------------------------------------
 sleep 10
+
 curl -s --user admin:admin "http://localhost:3000/api/datasources" -X POST \
   -H 'Content-Type: application/json;charset=UTF-8' \
   --data-binary '{"name":"SBMS_Data","isDefault":true,"type":"influxdb",\
 "url":"http://localhost:8086","database":"SBMS","access":"proxy","basicAuth":false}' \
-  > /dev/null || echo "Hinweis: Datasource ggf. manuell im Grafana-UI anlegen."
+  > /dev/null || echo "    Hinweis: Datasource ggf. manuell im Grafana-UI anlegen."
 
 # ------------------------------------------------------------------------------
-# 7. LiveLogger starten (nur wenn Serial-Port da ist - sonst startet er später)
-# ------------------------------------------------------------------------------
-if [ -e /dev/ttyUSB0 ]; then
-  systemctl start SBMS-LiveLogger
-else
-  echo "Hinweis: /dev/ttyUSB0 nicht gefunden - LiveLogger startet beim nächsten Boot automatisch."
-  echo "         SBMS0-USB-Adapter einstecken und ausführen:  systemctl start SBMS-LiveLogger"
-fi
-
-# ------------------------------------------------------------------------------
-# Fertig
+# Abschluss + Status
 # ------------------------------------------------------------------------------
 IP=$(hostname -I | awk '{print $1}')
 echo ""
 echo "=============================================================="
-echo " Installation abgeschlossen!"
+echo " FERTIG! Status der Dienste:"
+systemctl is-active influxdb grafana-server SBMS-LiveLogger \
+  | paste -d' ' <(echo -e "influxdb:\ngrafana-server:\nSBMS-LiveLogger:") - \
+  || true
 echo ""
 echo "  Grafana  : http://${IP}:3000   (admin/admin - ändern!)"
-echo "  InfluxDB : localhost:8086 (DB: SBMS)"
-echo "  Logger   : systemctl status SBMS-LiveLogger"
-echo ""
-echo "  Nächster Schritt:"
-echo "  Grafana-UI -> Dashboards -> Import -> 'SBMS-Grafana Dashboard.json'"
-echo ""
-echo "  Updates künftig:  sudo apt update && sudo apt upgrade"
+echo "  Dashboard: 'SBMS-Grafana Dashboard.json' importieren, Refresh = 1s"
+echo "  Updates  : sudo apt update && sudo apt upgrade"
 echo "=============================================================="
