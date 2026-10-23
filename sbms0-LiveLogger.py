@@ -241,12 +241,11 @@ def main():
     minute_acc = {}          # Feldname -> [sum, count]
     minute_start = None      # Zeitstempel des Minutenfensters
 
-    def flush_minute(close_ts):
+    def flush_minute():
         """Schreibt die Mittelwerte des abgelaufenen Minutenfensters in downsampled_1m."""
-        global minute_acc, minute_start
+        nonlocal minute_acc, minute_start
         if not minute_acc or minute_start is None:
             return
-        points = []
         body = {
             "measurement": INFLUX_MEASUREMENT,
             "tags": {"Name": INFLUX_TAG_NAME},
@@ -257,9 +256,8 @@ def main():
             if c > 0:
                 body['fields'][field] = round(s / c, 5)
         if body['fields']:
-            points.append(body)
             try:
-                client.write_points(points, retention_policy='downsampled_1m')
+                client.write_points([body], retention_policy='downsampled_1m')
             except Exception as e:
                 print('Downsample-Fehler: ' + str(e)[:80], file=sys.stderr)
         minute_acc = {}
@@ -318,7 +316,7 @@ def main():
                         minute_start = cur_minute
                     elif cur_minute != minute_start:
                         # Minutenfenster abgelaufen -> Mittelwerte schreiben
-                        flush_minute(cur_minute)
+                        flush_minute()
                         minute_start = cur_minute
                     for field, val in build_json_body(data, ts)[0]['fields'].items():
                         if isinstance(val, (int, float)):
