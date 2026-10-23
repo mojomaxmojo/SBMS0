@@ -1,0 +1,462 @@
+{
+  "annotations": {"list": []},
+  "description": "SBMS0 Berechnungen - Tagesenergie & Prognosen (Refresh 30s, 1-Min-Daten fuer Energie)",
+  "editable": true,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": {"h": 1, "w": 24, "x": 0, "y": 0},
+      "id": 200,
+      "panels": [],
+      "title": "Energie heute (1-Min-Daten, exakt mathematisch)",
+      "type": "row"
+    },
+    {
+      "datasource": {"type": "influxdb", "uid": "dg20jcsde4wlcd"},
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 2,
+          "mappings": [],
+          "max": 8,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {"color": "green", "value": 0},
+              {"color": "red", "value": 80}
+            ]
+          },
+          "unit": "kwatth"
+        },
+        "overrides": [
+          {
+            "matcher": {"id": "byName", "options": "Erzeugt"},
+            "properties": [{"id": "color", "value": {"fixedColor": "green", "mode": "fixed"}}]
+          },
+          {
+            "matcher": {"id": "byName", "options": "Geladen"},
+            "properties": [{"id": "color", "value": {"fixedColor": "yellow", "mode": "fixed"}}]
+          },
+          {
+            "matcher": {"id": "byName", "options": "Entladen"},
+            "properties": [{"id": "color", "value": {"fixedColor": "red", "mode": "fixed"}}]
+          },
+          {
+            "matcher": {"id": "byName", "options": "Verbraucht"},
+            "properties": [{"id": "color", "value": {"fixedColor": "orange", "mode": "fixed"}}]
+          }
+        ]
+      },
+      "gridPos": {"h": 6, "w": 12, "x": 0, "y": 1},
+      "id": 201,
+      "options": {
+        "displayMode": "gradient",
+        "legend": {"calcs": [], "displayMode": "list", "placement": "bottom", "showLegend": false},
+        "maxVizHeight": 300,
+        "minVizHeight": 10,
+        "minVizWidth": 0,
+        "namePlacement": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {"calcs": ["sum"], "fields": "", "values": false},
+        "showUnfilled": true,
+        "sizing": "manual",
+        "valueMode": "color"
+      },
+      "targets": [
+        {
+          "alias": "Erzeugt",
+          "datasource": {"type": "influxdb", "uid": "dg20jcsde4wlcd"},
+          "groupBy": [
+            {"params": ["$__interval"], "type": "time"},
+            {"params": ["null"], "type": "fill"}
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT mean(\"val\") / 60 / 1000 FROM (SELECT \"PV Total Current\" * \"Battery Voltage\" AS \"val\" FROM \"downsampled_1m\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter GROUP BY time(1m) fill(null)) WHERE $timeFilter",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series"
+        },
+        {
+          "alias": "Geladen",
+          "datasource": {"type": "influxdb", "uid": "dg20jcsde4wlcd"},
+          "groupBy": [
+            {"params": ["$__interval"], "type": "time"},
+            {"params": ["null"], "type": "fill"}
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT mean(\"val\") / 60 / 1000 FROM (SELECT (\"Battery Current\" + ABS(\"Battery Current\"))/2 * \"Battery Voltage\" AS \"val\" FROM \"downsampled_1m\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter GROUP BY time(1m) fill(null)) WHERE $timeFilter",
+          "rawQuery": true,
+          "refId": "B",
+          "resultFormat": "time_series"
+        },
+        {
+          "alias": "Entladen",
+          "datasource": {"type": "influxdb", "uid": "dg20jcsde4wlcd"},
+          "groupBy": [
+            {"params": ["$__interval"], "type": "time"},
+            {"params": ["null"], "type": "fill"}
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT mean(\"val\") / 60 / 1000 FROM (SELECT (-\"Battery Current\" + ABS(\"Battery Current\"))/2 * \"Battery Voltage\" AS \"val\" FROM \"downsampled_1m\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter GROUP BY time(1m) fill(null)) WHERE $timeFilter",
+          "rawQuery": true,
+          "refId": "C",
+          "resultFormat": "time_series"
+        },
+        {
+          "alias": "Verbraucht",
+          "datasource": {"type": "influxdb", "uid": "dg20jcsde4wlcd"},
+          "groupBy": [
+            {"params": ["$__interval"], "type": "time"},
+            {"params": ["null"], "type": "fill"}
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT mean(\"val\") / 60 / 1000 FROM (SELECT \"Battery Voltage\" * (\"PV Total Current\"-\"Battery Current\") AS \"val\" FROM \"downsampled_1m\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter GROUP BY time(1m) fill(null)) WHERE $timeFilter",
+          "rawQuery": true,
+          "refId": "D",
+          "resultFormat": "time_series"
+        }
+      ],
+      "title": "Energy",
+      "type": "bargauge"
+    },
+    {
+      "datasource": {"type": "influxdb", "uid": "dg20jcsde4wlcd"},
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "palette-classic"},
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 30,
+            "gradientMode": "opacity",
+            "lineInterpolation": "smooth",
+            "lineWidth": 1,
+            "showPoints": "never",
+            "spanNulls": true
+          },
+          "unit": "watt"
+        },
+        "overrides": [
+          {
+            "matcher": {"id": "byName", "options": "PV power"},
+            "properties": [{"id": "color", "value": {"fixedColor": "green", "mode": "fixed"}}]
+          },
+          {
+            "matcher": {"id": "byName", "options": "Battery"},
+            "properties": [{"id": "color", "value": {"mode": "thresholds", "seriesBy": "last"}}]
+          },
+          {
+            "matcher": {"id": "byName", "options": "Consumption"},
+            "properties": [{"id": "color", "value": {"fixedColor": "orange", "mode": "fixed"}}]
+          }
+        ]
+      },
+      "gridPos": {"h": 6, "w": 12, "x": 12, "y": 1},
+      "id": 202,
+      "options": {
+        "legend": {"calcs": ["min", "mean", "max"], "displayMode": "table", "placement": "bottom", "showLegend": true},
+        "tooltip": {"hideZeros": false, "mode": "multi", "sort": "none"}
+      },
+      "targets": [
+        {
+          "alias": "PV power",
+          "datasource": {"type": "influxdb", "uid": "dg20jcsde4wlcd"},
+          "groupBy": [
+            {"params": ["$__interval"], "type": "time"},
+            {"params": ["null"], "type": "fill"}
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT mean(\"val\") FROM (SELECT \"PV Total Current\" * \"Battery Voltage\" AS \"val\" FROM \"downsampled_1m\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter GROUP BY time($__interval) fill(null)) WHERE $timeFilter",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "maxDataPoints": 1000
+        },
+        {
+          "alias": "Consumption",
+          "datasource": {"type": "influxdb", "uid": "dg20jcsde4wlcd"},
+          "groupBy": [
+            {"params": ["$__interval"], "type": "time"},
+            {"params": ["null"], "type": "fill"}
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT mean(\"val\") FROM (SELECT (\"PV Total Current\"-\"Battery Current\") * \"Battery Voltage\" AS \"val\" FROM \"downsampled_1m\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter GROUP BY time($__interval) fill(null)) WHERE $timeFilter",
+          "rawQuery": true,
+          "refId": "B",
+          "resultFormat": "time_series",
+          "maxDataPoints": 1000
+        },
+        {
+          "alias": "Battery",
+          "datasource": {"type": "influxdb", "uid": "dg20jcsde4wlcd"},
+          "groupBy": [
+            {"params": ["$__interval"], "type": "time"},
+            {"params": ["null"], "type": "fill"}
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT mean(\"val\") FROM (SELECT \"Battery Current\" * \"Battery Voltage\" AS \"val\" FROM \"downsampled_1m\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter GROUP BY time($__interval) fill(null)) WHERE $timeFilter",
+          "rawQuery": true,
+          "refId": "C",
+          "resultFormat": "time_series",
+          "maxDataPoints": 1000
+        }
+      ],
+      "title": "Energy flow (heute)",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {"h": 1, "w": 24, "x": 0, "y": 7},
+      "id": 210,
+      "panels": [],
+      "title": "Prognosen (Rohdaten - eigene Zeitfenster)",
+      "type": "row"
+    },
+    {
+      "datasource": {"type": "influxdb", "uid": "dg20jcsde4wlcd"},
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 0,
+          "mappings": [],
+          "max": 2880,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {"color": "green", "value": 0},
+              {"color": "#EAB839", "value": 480},
+              {"color": "red", "value": 1440}
+            ]
+          },
+          "unit": "m"
+        },
+        "overrides": []
+      },
+      "gridPos": {"h": 6, "w": 12, "x": 0, "y": 8},
+      "id": 211,
+      "options": {
+        "displayMode": "gradient",
+        "legend": {"calcs": [], "displayMode": "list", "placement": "bottom", "showLegend": false},
+        "maxVizHeight": 300,
+        "minVizHeight": 10,
+        "minVizWidth": 0,
+        "namePlacement": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {"calcs": ["mean"], "fields": "", "values": false},
+        "showUnfilled": true,
+        "sizing": "manual",
+        "valueMode": "color"
+      },
+      "targets": [
+        {
+          "alias": "Current (5m)",
+          "datasource": {"type": "influxdb", "uid": "dg20jcsde4wlcd"},
+          "groupBy": [],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT  (315 *(100 - \"State of Charge\")  / 100) /  ((\"Battery Current\" +ABS(\"Battery Current\")) / 2 ) * 60 FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND \"Battery Current\" > 0 AND time > now() -5m",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series"
+        },
+        {
+          "alias": "Last 15m",
+          "datasource": {"type": "influxdb", "uid": "dg20jcsde4wlcd"},
+          "groupBy": [],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT  (315 *(100 - \"State of Charge\")  / 100) /  ((\"Battery Current\" +ABS(\"Battery Current\")) / 2 ) * 60 FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND \"Battery Current\" > 0 AND time > now() -15m",
+          "rawQuery": true,
+          "refId": "B",
+          "resultFormat": "time_series"
+        },
+        {
+          "alias": "Last 1h",
+          "datasource": {"type": "influxdb", "uid": "dg20jcsde4wlcd"},
+          "groupBy": [],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT  (315 *(100 - \"State of Charge\")  / 100) /  ((\"Battery Current\" +ABS(\"Battery Current\")) / 2 ) * 60 FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND \"Battery Current\" > 0 AND time > now() -1h",
+          "rawQuery": true,
+          "refId": "C",
+          "resultFormat": "time_series"
+        }
+      ],
+      "title": "Time to full",
+      "type": "bargauge"
+    },
+    {
+      "datasource": {"type": "influxdb", "uid": "dg20jcsde4wlcd"},
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 0,
+          "mappings": [],
+          "max": 14400,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {"color": "red", "value": 0},
+              {"color": "#EAB839", "value": 7},
+              {"color": "green", "value": 100}
+            ]
+          },
+          "unit": "m"
+        },
+        "overrides": []
+      },
+      "gridPos": {"h": 6, "w": 12, "x": 12, "y": 8},
+      "id": 212,
+      "options": {
+        "displayMode": "gradient",
+        "legend": {"calcs": [], "displayMode": "list", "placement": "bottom", "showLegend": false},
+        "maxVizHeight": 300,
+        "minVizHeight": 10,
+        "minVizWidth": 0,
+        "namePlacement": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {"calcs": ["mean"], "fields": "", "values": false},
+        "showUnfilled": true,
+        "sizing": "manual",
+        "valueMode": "color"
+      },
+      "targets": [
+        {
+          "alias": "Current (5m)",
+          "datasource": {"type": "influxdb", "uid": "dg20jcsde4wlcd"},
+          "groupBy": [],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT  (315 * \"State of Charge\" / 100) / ((-\"Battery Current\" + ABS(\"Battery Current\"))/2 ) *60 FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND \"Battery Current\" < 0 AND time > now() -5m",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series"
+        },
+        {
+          "alias": "Last 1h",
+          "datasource": {"type": "influxdb", "uid": "dg20jcsde4wlcd"},
+          "groupBy": [],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT  (315 * \"State of Charge\" / 100) /  (\"PV Total Current\"-\"Battery Current\") / 2 * 60  FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND (\"PV Total Current\" - \"Battery Current\") > 0 AND time > now() -1h",
+          "rawQuery": true,
+          "refId": "B",
+          "resultFormat": "time_series"
+        },
+        {
+          "alias": "Last 24h",
+          "datasource": {"type": "influxdb", "uid": "dg20jcsde4wlcd"},
+          "groupBy": [],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT  (315 * \"State of Charge\" / 100) /  (\"PV Total Current\"-\"Battery Current\") / 2 * 60  FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND (\"PV Total Current\" - \"Battery Current\") > 0 AND time > now() -24h",
+          "rawQuery": true,
+          "refId": "C",
+          "resultFormat": "time_series"
+        }
+      ],
+      "title": "Time to empty",
+      "type": "bargauge"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {"h": 1, "w": 24, "x": 0, "y": 14},
+      "id": 220,
+      "panels": [],
+      "title": "Tagesverlauf",
+      "type": "row"
+    },
+    {
+      "datasource": {"type": "influxdb", "uid": "dg20jcsde4wlcd"},
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "palette-classic"},
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 15,
+            "gradientMode": "none",
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "showPoints": "never",
+            "spanNulls": true
+          },
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": 0}]},
+          "unit": "volt"
+        },
+        "overrides": [
+          {
+            "matcher": {"id": "byName", "options": "SOC"},
+            "properties": [
+              {"id": "unit", "value": "percent"},
+              {"id": "max", "value": 100},
+              {"id": "custom.lineStyle", "value": {"dash": [0, 10], "fill": "dot"}}
+            ]
+          }
+        ]
+      },
+      "gridPos": {"h": 9, "w": 24, "x": 0, "y": 15},
+      "id": 221,
+      "options": {
+        "legend": {"calcs": ["min", "max", "lastNotNull"], "displayMode": "table", "placement": "bottom", "showLegend": true},
+        "tooltip": {"hideZeros": false, "mode": "multi", "sort": "none"}
+      },
+      "targets": [
+        {
+          "alias": "Voltage",
+          "datasource": {"type": "influxdb", "uid": "dg20jcsde4wlcd"},
+          "groupBy": [
+            {"params": ["$__interval"], "type": "time"},
+            {"params": ["null"], "type": "fill"}
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT mean(\"Battery Voltage\") FROM \"downsampled_1m\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter GROUP BY time($__interval) fill(null)",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "maxDataPoints": 1000
+        },
+        {
+          "alias": "SOC",
+          "datasource": {"type": "influxdb", "uid": "dg20jcsde4wlcd"},
+          "groupBy": [
+            {"params": ["$__interval"], "type": "time"},
+            {"params": ["null"], "type": "fill"}
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT mean(\"State of Charge\") FROM \"downsampled_1m\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter GROUP BY time($__interval) fill(null)",
+          "rawQuery": true,
+          "refId": "B",
+          "resultFormat": "time_series",
+          "maxDataPoints": 1000
+        }
+      ],
+      "title": "Battery Levels (heute)",
+      "type": "timeseries"
+    }
+  ],
+  "preload": false,
+  "refresh": "30s",
+  "schemaVersion": 42,
+  "tags": ["sbms", "sbms0", "berechnungen"],
+  "templating": {"list": []},
+  "time": {"from": "now/d", "to": "now"},
+  "timepicker": {
+    "refresh_intervals": ["10s", "30s", "1m", "5m"]
+  },
+  "timezone": "browser",
+  "title": "SBMS0 BERECHNUNGEN",
+  "uid": "sbms-calc-01",
+  "version": 1
+}
