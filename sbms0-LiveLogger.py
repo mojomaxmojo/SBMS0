@@ -148,6 +148,9 @@ def build_json_body(data, ts):
                 "Cell 7": data['Cells'][6],
                 "Cell 8": data['Cells'][7],
                 "Cell Delta": data['Cell Delta'],
+                "PV Power W": round(data['PV Total'] * data['Battery Voltage'], 3),
+                "Battery Power W": round(data['Battery Current'] * data['Battery Voltage'], 3),
+                "Consumption Power W": round((data['PV Total'] - data['Battery Current']) * data['Battery Voltage'], 3),
             }
         }
     ]

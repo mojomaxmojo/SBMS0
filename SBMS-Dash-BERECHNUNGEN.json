@@ -19,7 +19,8 @@
       "id": 200,
       "panels": [],
       "title": "Energie heute (1-Min-Daten, exakt mathematisch)",
-      "type": "row"
+      "type": "row",
+      "targets": null
     },
     {
       "datasource": {
@@ -147,26 +148,14 @@
             "type": "influxdb",
             "uid": "dg20jcsde4wlcd"
           },
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
+          "groupBy": [],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT mean(\"val\") / 60 / 1000 FROM (SELECT \"PV Total Current\" * \"Battery Voltage\" AS \"val\" FROM \"downsampled_1m\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter GROUP BY time(1m) fill(null)) WHERE $timeFilter",
+          "query": "SELECT sum(\"PV Power W\") / 3600 / 1000 FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter",
           "rawQuery": true,
           "refId": "A",
-          "resultFormat": "time_series"
+          "resultFormat": "time_series",
+          "maxDataPoints": 1000
         },
         {
           "alias": "Geladen",
@@ -174,26 +163,14 @@
             "type": "influxdb",
             "uid": "dg20jcsde4wlcd"
           },
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
+          "groupBy": [],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT mean(\"val\") / 60 / 1000 FROM (SELECT (\"Battery Current\" + ABS(\"Battery Current\"))/2 * \"Battery Voltage\" AS \"val\" FROM \"downsampled_1m\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter GROUP BY time(1m) fill(null)) WHERE $timeFilter",
+          "query": "SELECT sum(\"Battery Power W\") / 3600 / 1000 / 2 FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND \"Battery Power W\" > 0 AND $timeFilter",
           "rawQuery": true,
           "refId": "B",
-          "resultFormat": "time_series"
+          "resultFormat": "time_series",
+          "maxDataPoints": 1000
         },
         {
           "alias": "Entladen",
@@ -201,26 +178,14 @@
             "type": "influxdb",
             "uid": "dg20jcsde4wlcd"
           },
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
+          "groupBy": [],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT mean(\"val\") / 60 / 1000 FROM (SELECT (-\"Battery Current\" + ABS(\"Battery Current\"))/2 * \"Battery Voltage\" AS \"val\" FROM \"downsampled_1m\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter GROUP BY time(1m) fill(null)) WHERE $timeFilter",
+          "query": "SELECT sum(\"Battery Power W\") / 3600 / 1000 / 2 FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND \"Battery Power W\" > 0 AND $timeFilter",
           "rawQuery": true,
           "refId": "C",
-          "resultFormat": "time_series"
+          "resultFormat": "time_series",
+          "maxDataPoints": 1000
         },
         {
           "alias": "Verbraucht",
@@ -228,26 +193,14 @@
             "type": "influxdb",
             "uid": "dg20jcsde4wlcd"
           },
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
+          "groupBy": [],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT mean(\"val\") / 60 / 1000 FROM (SELECT \"Battery Voltage\" * (\"PV Total Current\"-\"Battery Current\") AS \"val\" FROM \"downsampled_1m\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter GROUP BY time(1m) fill(null)) WHERE $timeFilter",
+          "query": "SELECT sum(\"Consumption Power W\") / 3600 / 1000 FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter",
           "rawQuery": true,
           "refId": "D",
-          "resultFormat": "time_series"
+          "resultFormat": "time_series",
+          "maxDataPoints": 1000
         }
       ],
       "title": "Energy",
@@ -369,7 +322,7 @@
           ],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT mean(\"val\") FROM (SELECT \"PV Total Current\" * \"Battery Voltage\" AS \"val\" FROM \"downsampled_1m\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter GROUP BY time($__interval) fill(null)) WHERE $timeFilter",
+          "query": "SELECT mean(\"PV Power W\") FROM \"downsampled_1m\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter GROUP BY time($__interval) fill(null)",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -397,7 +350,7 @@
           ],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT mean(\"val\") FROM (SELECT (\"PV Total Current\"-\"Battery Current\") * \"Battery Voltage\" AS \"val\" FROM \"downsampled_1m\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter GROUP BY time($__interval) fill(null)) WHERE $timeFilter",
+          "query": "SELECT mean(\"Consumption Power W\") FROM \"downsampled_1m\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter GROUP BY time($__interval) fill(null)",
           "rawQuery": true,
           "refId": "B",
           "resultFormat": "time_series",
@@ -425,7 +378,7 @@
           ],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT mean(\"val\") FROM (SELECT \"Battery Current\" * \"Battery Voltage\" AS \"val\" FROM \"downsampled_1m\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter GROUP BY time($__interval) fill(null)) WHERE $timeFilter",
+          "query": "SELECT mean(\"Battery Power W\") FROM \"downsampled_1m\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter GROUP BY time($__interval) fill(null)",
           "rawQuery": true,
           "refId": "C",
           "resultFormat": "time_series",
@@ -446,7 +399,8 @@
       "id": 210,
       "panels": [],
       "title": "Prognosen (Rohdaten - eigene Zeitfenster)",
-      "type": "row"
+      "type": "row",
+      "targets": null
     },
     {
       "datasource": {
@@ -518,13 +472,27 @@
             "type": "influxdb",
             "uid": "dg20jcsde4wlcd"
           },
-          "groupBy": [],
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
           "orderByTime": "ASC",
           "policy": "default",
           "query": "SELECT  (315 *(100 - \"State of Charge\")  / 100) /  ((\"Battery Current\" +ABS(\"Battery Current\")) / 2 ) * 60 FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND \"Battery Current\" > 0 AND time > now() -5m",
           "rawQuery": true,
           "refId": "A",
-          "resultFormat": "time_series"
+          "resultFormat": "time_series",
+          "maxDataPoints": 1000
         },
         {
           "alias": "Last 15m",
@@ -532,13 +500,27 @@
             "type": "influxdb",
             "uid": "dg20jcsde4wlcd"
           },
-          "groupBy": [],
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
           "orderByTime": "ASC",
           "policy": "default",
           "query": "SELECT  (315 *(100 - \"State of Charge\")  / 100) /  ((\"Battery Current\" +ABS(\"Battery Current\")) / 2 ) * 60 FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND \"Battery Current\" > 0 AND time > now() -15m",
           "rawQuery": true,
           "refId": "B",
-          "resultFormat": "time_series"
+          "resultFormat": "time_series",
+          "maxDataPoints": 1000
         },
         {
           "alias": "Last 1h",
@@ -546,13 +528,27 @@
             "type": "influxdb",
             "uid": "dg20jcsde4wlcd"
           },
-          "groupBy": [],
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
           "orderByTime": "ASC",
           "policy": "default",
           "query": "SELECT  (315 *(100 - \"State of Charge\")  / 100) /  ((\"Battery Current\" +ABS(\"Battery Current\")) / 2 ) * 60 FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND \"Battery Current\" > 0 AND time > now() -1h",
           "rawQuery": true,
           "refId": "C",
-          "resultFormat": "time_series"
+          "resultFormat": "time_series",
+          "maxDataPoints": 1000
         }
       ],
       "title": "Time to full",
@@ -628,13 +624,27 @@
             "type": "influxdb",
             "uid": "dg20jcsde4wlcd"
           },
-          "groupBy": [],
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
           "orderByTime": "ASC",
           "policy": "default",
           "query": "SELECT  (315 * \"State of Charge\" / 100) / ((-\"Battery Current\" + ABS(\"Battery Current\"))/2 ) *60 FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND \"Battery Current\" < 0 AND time > now() -5m",
           "rawQuery": true,
           "refId": "A",
-          "resultFormat": "time_series"
+          "resultFormat": "time_series",
+          "maxDataPoints": 1000
         },
         {
           "alias": "Last 1h",
@@ -642,13 +652,27 @@
             "type": "influxdb",
             "uid": "dg20jcsde4wlcd"
           },
-          "groupBy": [],
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
           "orderByTime": "ASC",
           "policy": "default",
           "query": "SELECT  (315 * \"State of Charge\" / 100) /  (\"PV Total Current\"-\"Battery Current\") / 2 * 60  FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND (\"PV Total Current\" - \"Battery Current\") > 0 AND time > now() -1h",
           "rawQuery": true,
           "refId": "B",
-          "resultFormat": "time_series"
+          "resultFormat": "time_series",
+          "maxDataPoints": 1000
         },
         {
           "alias": "Last 24h",
@@ -656,13 +680,27 @@
             "type": "influxdb",
             "uid": "dg20jcsde4wlcd"
           },
-          "groupBy": [],
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
           "orderByTime": "ASC",
           "policy": "default",
           "query": "SELECT  (315 * \"State of Charge\" / 100) /  (\"PV Total Current\"-\"Battery Current\") / 2 * 60  FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND (\"PV Total Current\" - \"Battery Current\") > 0 AND time > now() -24h",
           "rawQuery": true,
           "refId": "C",
-          "resultFormat": "time_series"
+          "resultFormat": "time_series",
+          "maxDataPoints": 1000
         }
       ],
       "title": "Time to empty",
@@ -679,7 +717,8 @@
       "id": 220,
       "panels": [],
       "title": "Tagesverlauf",
-      "type": "row"
+      "type": "row",
+      "targets": null
     },
     {
       "datasource": {
@@ -926,13 +965,27 @@
             "type": "influxdb",
             "uid": "dg20jcsde4wlcd"
           },
-          "groupBy": [],
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
           "orderByTime": "ASC",
           "policy": "raw_1s",
           "query": "SELECT \"Cell 1\" AS \"Cell1\", \"Cell 2\" AS \"Cell2\", \"Cell 3\" AS \"Cell3\", \"Cell 4\" AS \"Cell4\", \"Cell 5\" AS \"Cell5\", \"Cell 6\" AS \"Cell6\", \"Cell 7\" AS \"Cell7\", \"Cell 8\" AS \"Cell8\" FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter",
           "rawQuery": true,
           "refId": "A",
-          "resultFormat": "time_series"
+          "resultFormat": "time_series",
+          "maxDataPoints": 1000
         }
       ],
       "title": "Cell Voltages (Verlauf)",

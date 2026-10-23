@@ -19,7 +19,8 @@
       "id": 300,
       "panels": [],
       "title": "Verlauf",
-      "type": "row"
+      "type": "row",
+      "targets": null
     },
     {
       "datasource": {
@@ -284,7 +285,7 @@
           ],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT mean(\"val\") FROM (SELECT \"PV Total Current\" * \"Battery Voltage\" AS \"val\" FROM \"downsampled_1m\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter GROUP BY time($__interval) fill(null)) WHERE $timeFilter",
+          "query": "SELECT mean(\"PV Power W\") FROM \"downsampled_1m\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter GROUP BY time($__interval) fill(null)",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -312,7 +313,7 @@
           ],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT mean(\"val\") FROM (SELECT (\"PV Total Current\"-\"Battery Current\") * \"Battery Voltage\" AS \"val\" FROM \"downsampled_1m\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter GROUP BY time($__interval) fill(null)) WHERE $timeFilter",
+          "query": "SELECT mean(\"Consumption Power W\") FROM \"downsampled_1m\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter GROUP BY time($__interval) fill(null)",
           "rawQuery": true,
           "refId": "B",
           "resultFormat": "time_series",
@@ -340,7 +341,7 @@
           ],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT mean(\"val\") FROM (SELECT \"Battery Current\" * \"Battery Voltage\" AS \"val\" FROM \"downsampled_1m\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter GROUP BY time($__interval) fill(null)) WHERE $timeFilter",
+          "query": "SELECT mean(\"Battery Power W\") FROM \"downsampled_1m\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter GROUP BY time($__interval) fill(null)",
           "rawQuery": true,
           "refId": "C",
           "resultFormat": "time_series",
@@ -361,7 +362,8 @@
       "id": 310,
       "panels": [],
       "title": "Statistik",
-      "type": "row"
+      "type": "row",
+      "targets": null
     },
     {
       "datasource": {
@@ -417,7 +419,7 @@
           "groupBy": [],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT SUM(mean(\"val\")) / 60 / 1000 FROM (SELECT \"PV Total Current\" * \"Battery Voltage\" AS \"val\" FROM \"downsampled_1m\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter GROUP BY time(1m) fill(null)) WHERE $timeFilter",
+          "query": "SELECT sum(\"PV Power W\") / 3600 / 1000 FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series"
@@ -480,7 +482,7 @@
           "groupBy": [],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT SUM(mean(\"val\")) / 60 / 1000 FROM (SELECT (\"PV Total Current\"-\"Battery Current\") * \"Battery Voltage\" AS \"val\" FROM \"downsampled_1m\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter GROUP BY time(1m) fill(null)) WHERE $timeFilter",
+          "query": "SELECT sum(\"Consumption Power W\") / 3600 / 1000 FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series"
