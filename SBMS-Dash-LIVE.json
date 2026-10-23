@@ -1,5 +1,7 @@
 {
-  "annotations": {"list": []},
+  "annotations": {
+    "list": []
+  },
   "description": "SBMS0 Live-Daten - Sekunden-Puls (Refresh 3s)",
   "editable": true,
   "graphTooltip": 1,
@@ -8,17 +10,27 @@
   "panels": [
     {
       "collapsed": false,
-      "gridPos": {"h": 1, "w": 24, "x": 0, "y": 0},
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
       "id": 100,
       "panels": [],
       "title": "Live-Werte",
       "type": "row"
     },
     {
-      "datasource": {"type": "influxdb", "uid": "dg20jcsde4wlcd"},
+      "datasource": {
+        "type": "influxdb",
+        "uid": "dg20jcsde4wlcd"
+      },
       "fieldConfig": {
         "defaults": {
-          "color": {"mode": "thresholds"},
+          "color": {
+            "mode": "thresholds"
+          },
           "displayName": "State of Charge",
           "mappings": [],
           "max": 100,
@@ -26,37 +38,77 @@
           "thresholds": {
             "mode": "absolute",
             "steps": [
-              {"color": "red", "value": 0},
-              {"color": "light-red", "value": 10},
-              {"color": "super-light-orange", "value": 20},
-              {"color": "super-light-green", "value": 30},
-              {"color": "green", "value": 40},
-              {"color": "semi-dark-green", "value": 80},
-              {"color": "dark-green", "value": 100}
+              {
+                "color": "red",
+                "value": 0
+              },
+              {
+                "color": "light-red",
+                "value": 10
+              },
+              {
+                "color": "super-light-orange",
+                "value": 20
+              },
+              {
+                "color": "super-light-green",
+                "value": 30
+              },
+              {
+                "color": "green",
+                "value": 40
+              },
+              {
+                "color": "semi-dark-green",
+                "value": 80
+              },
+              {
+                "color": "dark-green",
+                "value": 100
+              }
             ]
           },
           "unit": "percent"
         },
         "overrides": []
       },
-      "gridPos": {"h": 4, "w": 8, "x": 0, "y": 1},
+      "gridPos": {
+        "h": 4,
+        "w": 8,
+        "x": 0,
+        "y": 1
+      },
       "id": 101,
       "options": {
         "displayMode": "lcd",
-        "legend": {"calcs": [], "displayMode": "list", "placement": "bottom", "showLegend": false},
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
         "maxVizHeight": 300,
         "minVizHeight": 10,
         "minVizWidth": 0,
         "namePlacement": "auto",
         "orientation": "horizontal",
-        "reduceOptions": {"calcs": ["last"], "fields": "", "values": false},
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "",
+          "values": false
+        },
         "showUnfilled": true,
         "sizing": "auto",
         "valueMode": "color"
       },
       "targets": [
         {
-          "datasource": {"type": "influxdb", "uid": "dg20jcsde4wlcd"},
+          "datasource": {
+            "type": "influxdb",
+            "uid": "dg20jcsde4wlcd"
+          },
           "groupBy": [],
           "orderByTime": "ASC",
           "policy": "default",
@@ -70,7 +122,10 @@
       "type": "bargauge"
     },
     {
-      "datasource": {"type": "influxdb", "uid": "dg20jcsde4wlcd"},
+      "datasource": {
+        "type": "influxdb",
+        "uid": "dg20jcsde4wlcd"
+      },
       "fieldConfig": {
         "defaults": {
           "decimals": 2,
@@ -78,39 +133,84 @@
           "thresholds": {
             "mode": "absolute",
             "steps": [
-              {"color": "blue", "value": 0},
-              {"color": "green", "value": 0},
-              {"color": "orange", "value": 0}
+              {
+                "color": "blue",
+                "value": 0
+              },
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "orange",
+                "value": 0
+              }
             ]
           },
           "unit": "watt"
         },
         "overrides": [
           {
-            "matcher": {"id": "byName", "options": "PV"},
-            "properties": [{"id": "color", "value": {"fixedColor": "green", "mode": "fixed"}}]
+            "matcher": {
+              "id": "byName",
+              "options": "PV"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
           },
           {
-            "matcher": {"id": "byName", "options": "Battery"},
-            "properties": [{"id": "color", "value": {"mode": "thresholds", "seriesBy": "last"}}]
+            "matcher": {
+              "id": "byName",
+              "options": "Battery"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "thresholds",
+                  "seriesBy": "last"
+                }
+              }
+            ]
           }
         ]
       },
-      "gridPos": {"h": 4, "w": 8, "x": 8, "y": 1},
+      "gridPos": {
+        "h": 4,
+        "w": 8,
+        "x": 8,
+        "y": 1
+      },
       "id": 102,
       "options": {
         "colorMode": "value",
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
-        "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
         "textMode": "auto",
         "wideLayout": true
       },
       "targets": [
         {
           "alias": "PV",
-          "datasource": {"type": "influxdb", "uid": "dg20jcsde4wlcd"},
+          "datasource": {
+            "type": "influxdb",
+            "uid": "dg20jcsde4wlcd"
+          },
           "groupBy": [],
           "orderByTime": "ASC",
           "policy": "default",
@@ -121,7 +221,10 @@
         },
         {
           "alias": "Battery",
-          "datasource": {"type": "influxdb", "uid": "dg20jcsde4wlcd"},
+          "datasource": {
+            "type": "influxdb",
+            "uid": "dg20jcsde4wlcd"
+          },
           "groupBy": [],
           "orderByTime": "ASC",
           "policy": "default",
@@ -135,31 +238,58 @@
       "type": "stat"
     },
     {
-      "datasource": {"type": "influxdb", "uid": "dg20jcsde4wlcd"},
+      "datasource": {
+        "type": "influxdb",
+        "uid": "dg20jcsde4wlcd"
+      },
       "fieldConfig": {
         "defaults": {
           "mappings": [],
-          "thresholds": {"mode": "absolute", "steps": [{"color": "orange", "value": 0}]},
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "orange",
+                "value": 0
+              }
+            ]
+          },
           "unit": "none"
         },
         "overrides": []
       },
-      "gridPos": {"h": 4, "w": 8, "x": 16, "y": 1},
+      "gridPos": {
+        "h": 4,
+        "w": 8,
+        "x": 16,
+        "y": 1
+      },
       "id": 103,
       "options": {
         "colorMode": "value",
         "graphMode": "none",
         "justifyMode": "auto",
         "orientation": "auto",
-        "reduceOptions": {"calcs": ["lastNotNull"], "fields": "/.*/", "values": false},
-        "text": {"valueSize": 24},
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/.*/",
+          "values": false
+        },
+        "text": {
+          "valueSize": 24
+        },
         "textMode": "auto",
         "wideLayout": true
       },
       "targets": [
         {
           "alias": "Flags",
-          "datasource": {"type": "influxdb", "uid": "dg20jcsde4wlcd"},
+          "datasource": {
+            "type": "influxdb",
+            "uid": "dg20jcsde4wlcd"
+          },
           "groupBy": [],
           "orderByTime": "ASC",
           "policy": "default",
@@ -173,10 +303,15 @@
       "type": "stat"
     },
     {
-      "datasource": {"type": "influxdb", "uid": "dg20jcsde4wlcd"},
+      "datasource": {
+        "type": "influxdb",
+        "uid": "dg20jcsde4wlcd"
+      },
       "fieldConfig": {
         "defaults": {
-          "color": {"mode": "thresholds"},
+          "color": {
+            "mode": "thresholds"
+          },
           "decimals": 3,
           "mappings": [],
           "max": 3.8,
@@ -184,35 +319,69 @@
           "thresholds": {
             "mode": "absolute",
             "steps": [
-              {"color": "dark-red", "value": 0},
-              {"color": "light-yellow", "value": 2.8},
-              {"color": "green", "value": 3},
-              {"color": "dark-green", "value": 3.2},
-              {"color": "dark-red", "value": 3.65}
+              {
+                "color": "dark-red",
+                "value": 0
+              },
+              {
+                "color": "light-yellow",
+                "value": 2.8
+              },
+              {
+                "color": "green",
+                "value": 3
+              },
+              {
+                "color": "dark-green",
+                "value": 3.2
+              },
+              {
+                "color": "dark-red",
+                "value": 3.65
+              }
             ]
           },
           "unit": "volt"
         },
         "overrides": []
       },
-      "gridPos": {"h": 6, "w": 19, "x": 0, "y": 23},
+      "gridPos": {
+        "h": 6,
+        "w": 19,
+        "x": 0,
+        "y": 23
+      },
       "id": 106,
       "options": {
         "displayMode": "lcd",
-        "legend": {"calcs": [], "displayMode": "list", "placement": "bottom", "showLegend": false},
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
         "maxVizHeight": 300,
         "minVizHeight": 10,
         "minVizWidth": 0,
         "namePlacement": "auto",
         "orientation": "horizontal",
-        "reduceOptions": {"calcs": ["last"], "fields": "", "values": false},
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "",
+          "values": false
+        },
         "showUnfilled": true,
         "sizing": "manual",
         "valueMode": "color"
       },
       "targets": [
         {
-          "datasource": {"type": "influxdb", "uid": "dg20jcsde4wlcd"},
+          "datasource": {
+            "type": "influxdb",
+            "uid": "dg20jcsde4wlcd"
+          },
           "groupBy": [],
           "orderByTime": "ASC",
           "policy": "raw_1s",
@@ -227,7 +396,10 @@
       "type": "bargauge"
     },
     {
-      "datasource": {"type": "influxdb", "uid": "dg20jcsde4wlcd"},
+      "datasource": {
+        "type": "influxdb",
+        "uid": "dg20jcsde4wlcd"
+      },
       "fieldConfig": {
         "defaults": {
           "decimals": 0,
@@ -237,30 +409,66 @@
           "thresholds": {
             "mode": "absolute",
             "steps": [
-              {"color": "green", "value": 0},
-              {"color": "yellow", "value": 100},
-              {"color": "red", "value": 150}
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "yellow",
+                "value": 100
+              },
+              {
+                "color": "red",
+                "value": 150
+              }
             ]
           },
           "unit": "mvolt"
         },
         "overrides": []
       },
-      "gridPos": {"h": 6, "w": 5, "x": 19, "y": 23},
+      "gridPos": {
+        "h": 6,
+        "w": 5,
+        "x": 19,
+        "y": 23
+      },
       "id": 107,
       "options": {
         "minVizHeight": 200,
         "minVizWidth": 200,
         "orientation": "auto",
-        "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
         "showThresholdLabels": false,
         "showThresholdMarkers": true,
         "sizing": "auto"
       },
       "targets": [
         {
-          "datasource": {"type": "influxdb", "uid": "dg20jcsde4wlcd"},
-          "groupBy": [{"params": ["1m"], "type": "time"}, {"params": ["previous"], "type": "fill"}],
+          "datasource": {
+            "type": "influxdb",
+            "uid": "dg20jcsde4wlcd"
+          },
+          "groupBy": [
+            {
+              "params": [
+                "1m"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "previous"
+              ],
+              "type": "fill"
+            }
+          ],
           "orderByTime": "DESC",
           "policy": "default",
           "query": "SELECT min(\"Cell Delta\") * 1000 FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter GROUP BY time(1m) fill(previous) ORDER BY time DESC",
@@ -274,10 +482,15 @@
       "type": "gauge"
     },
     {
-      "datasource": {"type": "influxdb", "uid": "dg20jcsde4wlcd"},
+      "datasource": {
+        "type": "influxdb",
+        "uid": "dg20jcsde4wlcd"
+      },
       "fieldConfig": {
         "defaults": {
-          "color": {"mode": "palette-classic"},
+          "color": {
+            "mode": "palette-classic"
+          },
           "custom": {
             "axisBorderShow": false,
             "axisCenteredZero": false,
@@ -289,17 +502,28 @@
             "drawStyle": "line",
             "fillOpacity": 15,
             "gradientMode": "none",
-            "hideFrom": {"legend": false, "tooltip": false, "viz": false},
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
             "insertNulls": false,
             "lineInterpolation": "smooth",
             "lineWidth": 1,
             "pointSize": 5,
-            "scaleDistribution": {"type": "linear"},
+            "scaleDistribution": {
+              "type": "linear"
+            },
             "showPoints": "never",
             "showValues": false,
             "spanNulls": true,
-            "stacking": {"group": "A", "mode": "none"},
-            "thresholdsStyle": {"mode": "off"}
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
           },
           "decimals": 2,
           "mappings": [],
@@ -308,24 +532,54 @@
           "thresholds": {
             "mode": "absolute",
             "steps": [
-              {"color": "dark-red", "value": 0},
-              {"color": "green", "value": 3},
-              {"color": "dark-red", "value": 3.65}
+              {
+                "color": "dark-red",
+                "value": 0
+              },
+              {
+                "color": "green",
+                "value": 3
+              },
+              {
+                "color": "dark-red",
+                "value": 3.65
+              }
             ]
           },
           "unit": "volt"
         },
         "overrides": []
       },
-      "gridPos": {"h": 9, "w": 24, "x": 0, "y": 5},
+      "gridPos": {
+        "h": 9,
+        "w": 24,
+        "x": 0,
+        "y": 5
+      },
       "id": 104,
       "options": {
-        "legend": {"calcs": ["min", "max", "lastNotNull"], "displayMode": "table", "placement": "bottom", "showLegend": true},
-        "tooltip": {"hideZeros": false, "mode": "multi", "sort": "none"}
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
       },
       "targets": [
         {
-          "datasource": {"type": "influxdb", "uid": "dg20jcsde4wlcd"},
+          "datasource": {
+            "type": "influxdb",
+            "uid": "dg20jcsde4wlcd"
+          },
           "groupBy": [],
           "orderByTime": "ASC",
           "policy": "raw_1s",
@@ -339,10 +593,15 @@
       "type": "timeseries"
     },
     {
-      "datasource": {"type": "influxdb", "uid": "dg20jcsde4wlcd"},
+      "datasource": {
+        "type": "influxdb",
+        "uid": "dg20jcsde4wlcd"
+      },
       "fieldConfig": {
         "defaults": {
-          "color": {"mode": "palette-classic"},
+          "color": {
+            "mode": "palette-classic"
+          },
           "custom": {
             "axisBorderShow": false,
             "axisCenteredZero": false,
@@ -359,54 +618,131 @@
           },
           "decimals": 2,
           "mappings": [],
-          "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": 0}]},
-          "unit": "amp"
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "watt"
         },
         "overrides": [
           {
-            "matcher": {"id": "byName", "options": "Battery Current"},
-            "properties": [{"id": "color", "value": {"fixedColor": "yellow", "mode": "fixed"}}]
+            "matcher": {
+              "id": "byName",
+              "options": "Battery Current"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "yellow",
+                  "mode": "fixed"
+                }
+              }
+            ]
           },
           {
-            "matcher": {"id": "byName", "options": "PV Total Current"},
-            "properties": [{"id": "color", "value": {"fixedColor": "green", "mode": "fixed"}}]
+            "matcher": {
+              "id": "byName",
+              "options": "PV Total Current"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
           },
           {
-            "matcher": {"id": "byName", "options": "External Load"},
-            "properties": [{"id": "color", "value": {"fixedColor": "orange", "mode": "fixed"}}]
+            "matcher": {
+              "id": "byName",
+              "options": "External Load"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "orange",
+                  "mode": "fixed"
+                }
+              }
+            ]
           }
         ]
       },
-      "gridPos": {"h": 9, "w": 24, "x": 0, "y": 14},
+      "gridPos": {
+        "h": 9,
+        "w": 24,
+        "x": 0,
+        "y": 14
+      },
       "id": 105,
       "options": {
-        "legend": {"calcs": ["min", "max", "lastNotNull"], "displayMode": "table", "placement": "bottom", "showLegend": true},
-        "tooltip": {"hideZeros": false, "mode": "multi", "sort": "none"}
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
       },
       "targets": [
         {
-          "datasource": {"type": "influxdb", "uid": "dg20jcsde4wlcd"},
+          "datasource": {
+            "type": "influxdb",
+            "uid": "dg20jcsde4wlcd"
+          },
           "groupBy": [],
           "orderByTime": "ASC",
           "policy": "raw_1s",
-          "query": "SELECT \"Battery Current\" AS \"Battery Current\", \"PV Total Current\" AS \"PV Total Current\", \"External Load\" AS \"External Load\" FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter",
+          "query": "SELECT (\"Battery Current\" * \"Battery Voltage\") AS \"Battery Power\", (\"PV Total Current\" * \"Battery Voltage\") AS \"PV Power\", (\"External Load\" * \"Battery Voltage\") AS \"Load Power\" FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series"
         }
       ],
-      "title": "Stroeme (Live-Verlauf)",
+      "title": "Leistung (Live-Verlauf)",
       "type": "timeseries"
     }
   ],
   "preload": false,
   "refresh": "3s",
   "schemaVersion": 42,
-  "tags": ["sbms", "sbms0", "live"],
-  "templating": {"list": []},
-  "time": {"from": "now-10m", "to": "now"},
+  "tags": [
+    "sbms",
+    "sbms0",
+    "live"
+  ],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-10m",
+    "to": "now"
+  },
   "timepicker": {
-    "refresh_intervals": ["1s", "3s", "5s", "10s", "30s"]
+    "refresh_intervals": [
+      "1s",
+      "3s",
+      "5s",
+      "10s",
+      "30s"
+    ]
   },
   "timezone": "browser",
   "title": "SBMS0 LIVE",
