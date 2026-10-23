@@ -1,0 +1,121 @@
+{
+  "annotations": {"list": []},
+  "description": "SBMS0 Startseite - Klickzentrale fuer alle Dashboards",
+  "editable": true,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {"type": "datasource", "uid": "grafana"},
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "thresholds"},
+          "mappings": [],
+          "thresholds": {"mode": "absolute", "steps": [{"color": "text", "value": 0}]}
+        },
+        "overrides": []
+      },
+      "gridPos": {"h": 4, "w": 24, "x": 0, "y": 0},
+      "id": 400,
+      "options": {
+        "mode": "html",
+        "content": "<div style=\"text-align:center; padding: 20px 0 10px 0;\">\n  <h1 style=\"font-size: 42px; margin: 0; color: #3d71d9;\">⚡ SBMS0 STEUERZENTRALE ⚡</h1>\n  <p style=\"font-size: 18px; color: #888; margin-top: 8px;\">Solar-Batterie-Monitoring · Wyse 3040 · 1-Hz-Logger</p>\n</div>"
+      },
+      "title": "",
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "datasource": {"type": "datasource", "uid": "grafana"},
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "thresholds"},
+          "mappings": [],
+          "thresholds": {"mode": "absolute", "steps": [{"color": "text", "value": 0}]}
+        },
+        "overrides": []
+      },
+      "gridPos": {"h": 8, "w": 8, "x": 0, "y": 4},
+      "id": 401,
+      "options": {
+        "mode": "html",
+        "content": "<a href=\"/d/sbms-live-01\" style=\"display:block; text-align:center; text-decoration:none; padding: 40px 20px; background: linear-gradient(135deg, #1f6091 0%, #144a6e 100%); border-radius: 12px; color: white;\">\n  <div style=\"font-size: 56px;\">📡</div>\n  <div style=\"font-size: 28px; font-weight: bold; margin-top: 10px;\">LIVE</div>\n  <div style=\"font-size: 15px; margin-top: 6px; opacity: 0.85;\">Sekunden-Puls · 3s Refresh</div>\n  <div style=\"font-size: 13px; margin-top: 12px; opacity: 0.7;\">SOC · Zellen · Power · Flags</div>\n</a>"
+      },
+      "title": "",
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "datasource": {"type": "datasource", "uid": "grafana"},
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "thresholds"},
+          "mappings": [],
+          "thresholds": {"mode": "absolute", "steps": [{"color": "text", "value": 0}]}
+        },
+        "overrides": []
+      },
+      "gridPos": {"h": 8, "w": 8, "x": 8, "y": 4},
+      "id": 402,
+      "options": {
+        "mode": "html",
+        "content": "<a href=\"/d/sbms-calc-01\" style=\"display:block; text-align:center; text-decoration:none; padding: 40px 20px; background: linear-gradient(135deg, #b8762a 0%, #8f5a1e 100%); border-radius: 12px; color: white;\">\n  <div style=\"font-size: 56px;\">🧮</div>\n  <div style=\"font-size: 28px; font-weight: bold; margin-top: 10px;\">BERECHNUNGEN</div>\n  <div style=\"font-size: 15px; margin-top: 6px; opacity: 0.85;\">Heute · 30s Refresh</div>\n  <div style=\"font-size: 13px; margin-top: 12px; opacity: 0.7;\">Energie kWh · Prognosen · Verlauf</div>\n</a>"
+      },
+      "title": "",
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "datasource": {"type": "datasource", "uid": "grafana"},
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "thresholds"},
+          "mappings": [],
+          "thresholds": {"mode": "absolute", "steps": [{"color": "text", "value": 0}]}
+        },
+        "overrides": []
+      },
+      "gridPos": {"h": 8, "w": 8, "x": 16, "y": 4},
+      "id": 403,
+      "options": {
+        "mode": "html",
+        "content": "<a href=\"/d/sbms-hist-01\" style=\"display:block; text-align:center; text-decoration:none; padding: 40px 20px; background: linear-gradient(135deg, #2e7d32 0%, #1d5a22 100%); border-radius: 12px; color: white;\">\n  <div style=\"font-size: 56px;\">📈</div>\n  <div style=\"font-size: 28px; font-weight: bold; margin-top: 10px;\">HISTORIE</div>\n  <div style=\"font-size: 15px; margin-top: 6px; opacity: 0.85;\">Woche / Monat / Jahr</div>\n  <div style=\"font-size: 13px; margin-top: 12px; opacity: 0.7;\">Energie-Statistik · Min/Max</div>\n</a>"
+      },
+      "title": "",
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "datasource": {"type": "datasource", "uid": "grafana"},
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "thresholds"},
+          "mappings": [],
+          "thresholds": {"mode": "absolute", "steps": [{"color": "text", "value": 0}]}
+        },
+        "overrides": []
+      },
+      "gridPos": {"h": 3, "w": 24, "x": 0, "y": 12},
+      "id": 404,
+      "options": {
+        "mode": "html",
+        "content": "<div style=\"text-align:center; padding: 10px 0;\">\n  <p style=\"font-size: 14px; color: #888;\">\n    <a href=\"/d/sbms-live-01\" style=\"color: #3d71d9; text-decoration: none;\">📡 LIVE</a> &nbsp;·&nbsp;\n    <a href=\"/d/sbms-calc-01\" style=\"color: #b8762a; text-decoration: none;\">🧮 BERECHNUNGEN</a> &nbsp;·&nbsp;\n    <a href=\"/d/sbms-hist-01\" style=\"color: #2e7d32; text-decoration: none;\">📈 HISTORIE</a>\n  </p>\n</div>"
+      },
+      "title": "",
+      "transparent": true,
+      "type": "text"
+    }
+  ],
+  "preload": false,
+  "refresh": "",
+  "schemaVersion": 42,
+  "tags": ["sbms", "start"],
+  "templating": {"list": []},
+  "time": {"from": "now-5m", "to": "now"},
+  "timepicker": {"refresh_intervals": []},
+  "timezone": "browser",
+  "title": "SBMS0 START",
+  "uid": "sbms-start-01",
+  "version": 1
+}
