@@ -179,6 +179,21 @@
                 }
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Verbrauch"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "orange",
+                  "mode": "fixed"
+                }
+              }
+            ]
           }
         ]
       },
@@ -231,6 +246,20 @@
           "query": "SELECT \"Battery Voltage\" * \"Battery Current\" FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter",
           "rawQuery": true,
           "refId": "B",
+          "resultFormat": "time_series"
+        },
+        {
+          "alias": "Verbrauch",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "dg20jcsde4wlcd"
+          },
+          "groupBy": [],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT \"Battery Voltage\" * (\"PV Total Current\"-\"Battery Current\") FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter",
+          "rawQuery": true,
+          "refId": "C",
           "resultFormat": "time_series"
         }
       ],
