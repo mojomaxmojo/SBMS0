@@ -436,7 +436,7 @@
           "values": false
         },
         "showUnfilled": true,
-        "sizing": "manual",
+        "sizing": "auto",
         "valueMode": "color"
       },
       "targets": [
