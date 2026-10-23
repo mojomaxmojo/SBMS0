@@ -412,7 +412,7 @@
         "h": 6,
         "w": 19,
         "x": 0,
-        "y": 23
+        "y": 5
       },
       "id": 106,
       "options": {
@@ -494,7 +494,7 @@
         "h": 6,
         "w": 5,
         "x": 19,
-        "y": 23
+        "y": 5
       },
       "id": 107,
       "options": {
@@ -543,117 +543,6 @@
       "title": "Cells Delta",
       "transparent": true,
       "type": "gauge"
-    },
-    {
-      "datasource": {
-        "type": "influxdb",
-        "uid": "dg20jcsde4wlcd"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "barWidthFactor": 0.6,
-            "drawStyle": "line",
-            "fillOpacity": 15,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "smooth",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "showValues": false,
-            "spanNulls": true,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "decimals": 2,
-          "mappings": [],
-          "max": 3.8,
-          "min": 2.5,
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "dark-red",
-                "value": 0
-              },
-              {
-                "color": "green",
-                "value": 3
-              },
-              {
-                "color": "dark-red",
-                "value": 3.65
-              }
-            ]
-          },
-          "unit": "volt"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 9,
-        "w": 24,
-        "x": 0,
-        "y": 5
-      },
-      "id": 104,
-      "options": {
-        "legend": {
-          "calcs": [
-            "min",
-            "max",
-            "lastNotNull"
-          ],
-          "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "hideZeros": false,
-          "mode": "multi",
-          "sort": "none"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "influxdb",
-            "uid": "dg20jcsde4wlcd"
-          },
-          "groupBy": [],
-          "orderByTime": "ASC",
-          "policy": "raw_1s",
-          "query": "SELECT \"Cell 1\" AS \"Cell1\", \"Cell 2\" AS \"Cell2\", \"Cell 3\" AS \"Cell3\", \"Cell 4\" AS \"Cell4\", \"Cell 5\" AS \"Cell5\", \"Cell 6\" AS \"Cell6\", \"Cell 7\" AS \"Cell7\", \"Cell 8\" AS \"Cell8\" FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter",
-          "rawQuery": true,
-          "refId": "A",
-          "resultFormat": "time_series"
-        }
-      ],
-      "title": "Cell Voltages (Live-Verlauf)",
-      "type": "timeseries"
     },
     {
       "datasource": {
@@ -744,7 +633,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 14
+        "y": 11
       },
       "id": 105,
       "options": {
