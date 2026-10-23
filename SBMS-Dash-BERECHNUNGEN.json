@@ -6,41 +6,7 @@
   "editable": true,
   "graphTooltip": 1,
   "id": null,
-  "links": [
-    {
-      "asDropdown": false,
-      "dashboards": [
-        "sbms-live-01"
-      ],
-      "includeVars": false,
-      "keepTime": false,
-      "targetBlank": false,
-      "title": "LIVE",
-      "type": "dashboards"
-    },
-    {
-      "asDropdown": false,
-      "dashboards": [
-        "sbms-calc-01"
-      ],
-      "includeVars": false,
-      "keepTime": false,
-      "targetBlank": false,
-      "title": "BERECHNUNGEN",
-      "type": "dashboards"
-    },
-    {
-      "asDropdown": false,
-      "dashboards": [
-        "sbms-hist-01"
-      ],
-      "includeVars": false,
-      "keepTime": false,
-      "targetBlank": false,
-      "title": "HISTORIE",
-      "type": "dashboards"
-    }
-  ],
+  "links": [],
   "panels": [
     {
       "collapsed": false,

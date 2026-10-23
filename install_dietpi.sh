@@ -163,9 +163,14 @@ fi
 # Grafana: 1s-Refresh freischalten + Dienst + Datasource
 # ------------------------------------------------------------------------------
 echo ">>> Grafana: 1s-Refresh freischalten ..."
-if ! grep -q "^min_refresh_interval" /etc/grafana/grafana.ini 2>/dev/null; then
-  printf '\n[panels]\nmin_refresh_interval = 1s\n' >> /etc/grafana/grafana.ini
+if [ ! -f /etc/systemd/system/grafana-server.service.d/override.conf ] || \
+   ! grep -q "GF_DASHBOARDS_MIN_REFRESH_INTERVAL" /etc/systemd/system/grafana-server.service.d/override.conf 2>/dev/null; then
+  mkdir -p /etc/systemd/system/grafana-server.service.d
+  printf '[Service]\nEnvironment="GF_DASHBOARDS_MIN_REFRESH_INTERVAL=1s"\n' \
+    > /etc/systemd/system/grafana-server.service.d/override.conf
 fi
+# Falsche [panels]-Sektion in der INI entfernen (Grafana 13 liest [dashboards]):
+sed -i '/^min_refresh_interval = 1s$/d' /etc/grafana/grafana.ini 2>/dev/null || true
 
 systemctl enable --now grafana-server
 systemctl restart grafana-server
