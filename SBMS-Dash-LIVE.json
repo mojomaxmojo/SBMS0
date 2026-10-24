@@ -349,9 +349,9 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 4,
+        "h": 2,
         "w": 12,
-        "x": 18,
+        "x": 12,
         "y": 1
       },
       "id": 103,
@@ -364,7 +364,7 @@
           "calcs": [
             "lastNotNull"
           ],
-          "fields": "/.*/",
+          "fields": "/^Flags$/",
           "values": false
         },
         "text": {
@@ -753,10 +753,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 4,
-        "w": 6,
+        "h": 2,
+        "w": 12,
         "x": 12,
-        "y": 1
+        "y": 3
       },
       "id": 108,
       "options": {
@@ -786,11 +786,11 @@
           "groupBy": [],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT \"State of Charge\" FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter",
+          "query": "SELECT last(\"Monitor Flags DE\") FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
-          "alias": "Time"
+          "alias": "Flags"
         }
       ],
       "title": "Zeitstempel",
