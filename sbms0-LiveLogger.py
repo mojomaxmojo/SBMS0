@@ -103,6 +103,10 @@ def parse_line(line):
     }
     flags_de = ', '.join(flag_de.get(name, name) for name in flags.split(', ') if name)
 
+    # Fehler-Indikator: 1 wenn ein echtes Fehler-Flag aktiv ist, sonst 0
+    error_flags = ('UVLK', 'OVLK', 'COC', 'DOC', 'DSC', 'OPEN', 'CELF', 'LVC')
+    error_active = 1 if any(bit_name for bit, bit_name in flag_defs if ERR & bit and bit_name in error_flags) else 0
+
     return {
         'SOC': SOC,
         'Battery Voltage': Battery_voltage,
@@ -124,6 +128,7 @@ def parse_line(line):
         'Error Binary': '{0:016b}'.format(ERR),
         'Flags': flags,
         'Flags DE': flags_de,
+        'Error Active': error_active,
     }
 
 
@@ -142,6 +147,7 @@ def build_json_body(data, ts):
                 "Internal Temperature": data['Internal Temp'],
                 "Monitor Flags": data['Flags'],
                 "Monitor Flags DE": data['Flags DE'],
+                "Error Active": data['Error Active'],
                 "Battery Voltage": data['Battery Voltage'],
                 "Battery Current": data['Battery Current'],
                 "PV Total Current": data['PV Total'],
