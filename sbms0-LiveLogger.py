@@ -90,6 +90,19 @@ def parse_line(line):
     ]
     flags = ', '.join(name for bit, name in flag_defs if ERR & bit)
 
+    # Deutsche Flag-Texte fuer Grafana (siehe SBMS0-Dokumentation)
+    flag_de = {
+        'DFET': 'DFET (Entladen EIN)', 'EOC': 'EOC (Ladeende)',
+        'CFET': 'CFET (Laden EIN)', 'ECCF': 'ECCF (Zellen-Balance)',
+        'LVC': 'FEHLER: Zelle zu tief', 'OPEN': 'FEHLER: Zellkabel',
+        'CELF': 'FEHLER: Zellfehler', 'DSC': 'FEHLER: Kurzschluss',
+        'DOC': 'FEHLER: Ueberstrom Entladen', 'COC': 'FEHLER: Ueberstrom Laden',
+        'IOT': 'IOT (Temperatur)', 'UVLK': 'FEHLER: FET-Kurzschluss',
+        'UV': 'UV (Unterspannung)', 'OVLK': 'FEHLER: FET-Kurzschluss',
+        'OV': 'OV (Ueberspannung)',
+    }
+    flags_de = ', '.join(flag_de.get(name, name) for name in flags.split(', ') if name)
+
     return {
         'SOC': SOC,
         'Battery Voltage': Battery_voltage,
@@ -110,6 +123,7 @@ def parse_line(line):
         'Error Code': ERR,
         'Error Binary': '{0:016b}'.format(ERR),
         'Flags': flags,
+        'Flags DE': flags_de,
     }
 
 
@@ -127,6 +141,7 @@ def build_json_body(data, ts):
                 "External Temperature": data['External Temp'],
                 "Internal Temperature": data['Internal Temp'],
                 "Monitor Flags": data['Flags'],
+                "Monitor Flags DE": data['Flags DE'],
                 "Battery Voltage": data['Battery Voltage'],
                 "Battery Current": data['Battery Current'],
                 "PV Total Current": data['PV Total'],
@@ -202,7 +217,7 @@ def render(data, ts, status, writes_ok, writes_err):
     lines.append('')
     lines.append(BOLD + '  Status:' + RESET)
     lines.append(f'  Error-Code   : {data["Error Code"]}  ({data["Error Binary"]})')
-    lines.append(f'  Flags        : {data["Flags"] or "(keine)"}')
+    lines.append(f'  Flags        : {data["Flags DE"] or "(keine)"}')
     lines.append('')
     lines.append('  Speicherung: InfluxDB ' + INFLUX_DB + '/' + INFLUX_MEASUREMENT
                  + ('  (+ CSV-Fallback)' if CSV_FALLBACK else '')
@@ -335,7 +350,8 @@ def main():
                         row += [data['Cell Delta'], data['PV Total'], data['PV1'], data['PV2'],
                                 data['External Load'], data['Internal Temp'], data['External Temp'],
                                 data['Heat 1'], data['Heat 2'], data['ADC2'], data['ADC3'],
-                                data['ADC4'], data['Error Code'], data['Error Binary'], data['Flags']]
+                                data['ADC4'], data['Error Code'], data['Error Binary'], data['Flags'],
+                                data['Flags DE']]
                         csv_writer.writerow(row)
                         csv_file.flush()
 
