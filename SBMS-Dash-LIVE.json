@@ -588,7 +588,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "Battery Current"
+              "options": "Battery Power"
             },
             "properties": [
               {
@@ -603,7 +603,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "PV Total Current"
+              "options": "PV Power"
             },
             "properties": [
               {
@@ -618,7 +618,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "External Load"
+              "options": "Load Power"
             },
             "properties": [
               {
