@@ -26,20 +26,20 @@ Datasource-UID: `dg20jcsde4wlcd` (InfluxDB, DB `SBMS`).
 
 ## Installation
 
-### DietPi / Debian (Dell Wyse 3040) – empfohlen
+### ⭐ DietPi (Dell Wyse 3040) – EMPFOHLEN
 ```bash
 sudo ./install_dietpi.sh
 ```
-Installiert InfluxDB, Grafana, Python-Module, richtet `SBMS-LiveLogger` als systemd-Dienst ein und konfiguriert Retention/Downsampling.
+Der bevorzugte Installationsweg: Installiert InfluxDB, Grafana, Python-Module in einem Durchgang, richtet `SBMS-LiveLogger` als systemd-Dienst ein (User `dietpi`, Gruppe `dialout`) und konfiguriert Retention/Downsampling. Idempotent — kann mehrfach ausgeführt werden.
 
-### Raspberry Pi (Legacy)
+### Raspberry Pi (nur falls kein DietPi verfügbar)
 ```bash
 sudo mkdir /home/SBMS0
 cd /home/SBMS0
 sudo wget -O SBMS_Pi_install.py https://raw.githubusercontent.com/LeoAlioth/SBMS0/master/SBMS_Pi_install.py
 sudo python3 SBMS_Pi_install.py
 ```
-Nutzt den klassischen `sbms0-SerialToInfluxDB.py`-Logger (ohne Live-Anzeige).
+Nutzt den klassischen `sbms0-SerialToInfluxDB.py`-Logger (ohne Live-Anzeige). `SBMS_Pi-IOT_install.py` ist die LITE-Variante (ohne Grafana-Installation). Beide sind auf Debian Bookworm+ / Python 3 umgestellt.
 
 ## Wichtige Berechnungs-Formeln (BERECHNUNGEN-Dashboard)
 
@@ -52,5 +52,9 @@ Nutzt den klassischen `sbms0-SerialToInfluxDB.py`-Logger (ohne Live-Anzeige).
 
 | Unit | Beschreibung |
 |---|---|
-| `SBMS-LiveLogger.service` | 1-Hz-Logger → InfluxDB (+ eigene 1-Min-Mittelwerte) |
-| `SBMS-Logger.service` | Legacy-Logger `sbms0-SerialToInfluxDB.py` |
+| `SBMS-LiveLogger.service` | 1-Hz-Logger → InfluxDB (+ eigene 1-Min-Mittelwerte) — **DietPi-Standard, User `dietpi`** |
+| `SBMS-Logger.service` | Legacy-Logger `sbms0-SerialToInfluxDB.py` (nur Pi-Installer, User `pi`) |
+
+## Ziel-System
+
+Primäres Zielsystem ist **DietPi (Debian Trixie) auf Dell Wyse 3040** — `install_dietpi.sh` deckt alles ab (Pakete, DB, Retention, Downsampling, Dienst, Grafana-Config inkl. 1-s-Refresh-Freischaltung). Die Pi-Installer sind nur Fallback für Raspberry-Pi-Hardware.
