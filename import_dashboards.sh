@@ -6,8 +6,9 @@
 # via Grafana HTTP-API. Idempotent: wiederholte Laeufe aktualisieren die
 # bestehenden Dashboards (overwrite, gleiche UIDs).
 #
-# Aufruf:   ./import_dashboards.sh
-# Optional: ./import_dashboards.sh "user:passwort"   (Default: admin:admin123)
+# Aufruf:   bash import_dashboards.sh
+# Optional: bash import_dashboards.sh "user:passwort"   (Default: admin:admin123)
+# (Falls chmod +x gesetzt ist, geht auch  ./import_dashboards.sh)
 # ==============================================================================
 
 AUTH="${1:-admin:admin123}"

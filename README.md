@@ -30,7 +30,7 @@ Datasource-UID: `dg20jcsde4wlcd` (InfluxDB, DB `SBMS`).
 ```bash
 sudo ./install_dietpi.sh
 ```
-Der bevorzugte Installationsweg: Installiert InfluxDB, Grafana, Python-Module in einem Durchgang, richtet `SBMS-LiveLogger` als systemd-Dienst ein (User `dietpi`, Gruppe `dialout`) und konfiguriert Retention/Downsampling. Idempotent — kann mehrfach ausgeführt werden. Anschließend einmal `sudo ./import_dashboards.sh` für den automatischen Dashboard-Import (Grafana-Login: `admin:admin123`, Port 3001).
+Der bevorzugte Installationsweg: Installiert InfluxDB, Grafana, Python-Module in einem Durchgang, richtet `SBMS-LiveLogger` als systemd-Dienst ein (User `dietpi`, Gruppe `dialout`) und konfiguriert Retention/Downsampling. Idempotent — kann mehrfach ausgeführt werden. Anschließend einmal `bash import_dashboards.sh` für den automatischen Dashboard-Import (Grafana-Login: `admin:admin123`, Port 3001).
 
 ### Raspberry Pi (nur falls kein DietPi verfügbar)
 ```bash
