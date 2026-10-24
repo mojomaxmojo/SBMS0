@@ -344,7 +344,7 @@
           "calcs": [
             "lastNotNull"
           ],
-          "fields": "/.*/",
+          "fields": "/^(Flags|Error Active)$/",
           "values": false
         },
         "text": {
