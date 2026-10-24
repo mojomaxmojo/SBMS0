@@ -341,7 +341,10 @@
               }
             ]
           },
-          "unit": "none"
+          "unit": "none",
+          "color": {
+            "mode": "thresholds"
+          }
         },
         "overrides": [
           {
@@ -360,6 +363,18 @@
               {
                 "id": "mappings",
                 "value": []
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "text",
+                      "value": 0
+                    }
+                  ]
+                }
               }
             ]
           }
