@@ -340,7 +340,7 @@
           "calcs": [
             "lastNotNull"
           ],
-          "fields": "/^Flags$/",
+          "fields": "/.*/",
           "values": false
         },
         "text": {
