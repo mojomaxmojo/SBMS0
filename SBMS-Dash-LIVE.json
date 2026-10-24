@@ -353,7 +353,7 @@
               {
                 "id": "color",
                 "value": {
-                  "fixedColor": "super-light-grey",
+                  "fixedColor": "orange",
                   "mode": "fixed"
                 }
               },
