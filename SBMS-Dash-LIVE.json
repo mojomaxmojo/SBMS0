@@ -174,8 +174,8 @@
               {
                 "id": "color",
                 "value": {
-                  "mode": "thresholds",
-                  "seriesBy": "last"
+                  "fixedColor": "blue",
+                  "mode": "fixed"
                 }
               }
             ]
@@ -557,7 +557,7 @@
               {
                 "id": "color",
                 "value": {
-                  "fixedColor": "yellow",
+                  "fixedColor": "blue",
                   "mode": "fixed"
                 }
               }
