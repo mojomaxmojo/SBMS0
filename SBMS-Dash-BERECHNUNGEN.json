@@ -6,7 +6,44 @@
   "editable": true,
   "graphTooltip": 1,
   "id": null,
-  "links": [],
+  "links": [
+    {
+      "asDropdown": false,
+      "icon": "external link",
+      "includeVars": false,
+      "keepTime": true,
+      "tags": [],
+      "targetBlank": false,
+      "title": "START",
+      "tooltip": "Zum START-Dashboard",
+      "type": "link",
+      "url": "/d/sbms-start-01/sbms-start"
+    },
+    {
+      "asDropdown": false,
+      "icon": "bolt",
+      "includeVars": false,
+      "keepTime": true,
+      "tags": [],
+      "targetBlank": false,
+      "title": "LIVE",
+      "tooltip": "Zum LIVE-Dashboard",
+      "type": "link",
+      "url": "/d/sbms-live-01/sbms-live"
+    },
+    {
+      "asDropdown": false,
+      "icon": "history",
+      "includeVars": false,
+      "keepTime": true,
+      "tags": [],
+      "targetBlank": false,
+      "title": "HISTORIE",
+      "tooltip": "Zum HISTORIE-Dashboard",
+      "type": "link",
+      "url": "/d/sbms-hist-01/sbms-historie"
+    }
+  ],
   "panels": [
     {
       "collapsed": false,

@@ -1,22 +1,79 @@
 {
-  "annotations": {"list": []},
+  "annotations": {
+    "list": []
+  },
   "description": "SBMS0 Startseite - Klickzentrale fuer alle Dashboards",
   "editable": true,
   "graphTooltip": 0,
   "id": null,
-  "links": [],
+  "links": [
+    {
+      "asDropdown": false,
+      "icon": "bolt",
+      "includeVars": false,
+      "keepTime": true,
+      "tags": [],
+      "targetBlank": false,
+      "title": "LIVE",
+      "tooltip": "Zum LIVE-Dashboard",
+      "type": "link",
+      "url": "/d/sbms-live-01/sbms-live"
+    },
+    {
+      "asDropdown": false,
+      "icon": "calculator",
+      "includeVars": false,
+      "keepTime": true,
+      "tags": [],
+      "targetBlank": false,
+      "title": "BERECHNUNGEN",
+      "tooltip": "Zum BERECHNUNGEN-Dashboard",
+      "type": "link",
+      "url": "/d/sbms-calc-01/sbms-berechnungen"
+    },
+    {
+      "asDropdown": false,
+      "icon": "history",
+      "includeVars": false,
+      "keepTime": true,
+      "tags": [],
+      "targetBlank": false,
+      "title": "HISTORIE",
+      "tooltip": "Zum HISTORIE-Dashboard",
+      "type": "link",
+      "url": "/d/sbms-hist-01/sbms-historie"
+    }
+  ],
   "panels": [
     {
-      "datasource": {"type": "datasource", "uid": "grafana"},
+      "datasource": {
+        "type": "datasource",
+        "uid": "grafana"
+      },
       "fieldConfig": {
         "defaults": {
-          "color": {"mode": "thresholds"},
+          "color": {
+            "mode": "thresholds"
+          },
           "mappings": [],
-          "thresholds": {"mode": "absolute", "steps": [{"color": "text", "value": 0}]}
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": 0
+              }
+            ]
+          }
         },
         "overrides": []
       },
-      "gridPos": {"h": 4, "w": 24, "x": 0, "y": 0},
+      "gridPos": {
+        "h": 4,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
       "id": 400,
       "options": {
         "mode": "html",
@@ -27,16 +84,34 @@
       "type": "text"
     },
     {
-      "datasource": {"type": "datasource", "uid": "grafana"},
+      "datasource": {
+        "type": "datasource",
+        "uid": "grafana"
+      },
       "fieldConfig": {
         "defaults": {
-          "color": {"mode": "thresholds"},
+          "color": {
+            "mode": "thresholds"
+          },
           "mappings": [],
-          "thresholds": {"mode": "absolute", "steps": [{"color": "text", "value": 0}]}
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": 0
+              }
+            ]
+          }
         },
         "overrides": []
       },
-      "gridPos": {"h": 8, "w": 8, "x": 0, "y": 4},
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 0,
+        "y": 4
+      },
       "id": 401,
       "options": {
         "mode": "html",
@@ -47,16 +122,34 @@
       "type": "text"
     },
     {
-      "datasource": {"type": "datasource", "uid": "grafana"},
+      "datasource": {
+        "type": "datasource",
+        "uid": "grafana"
+      },
       "fieldConfig": {
         "defaults": {
-          "color": {"mode": "thresholds"},
+          "color": {
+            "mode": "thresholds"
+          },
           "mappings": [],
-          "thresholds": {"mode": "absolute", "steps": [{"color": "text", "value": 0}]}
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": 0
+              }
+            ]
+          }
         },
         "overrides": []
       },
-      "gridPos": {"h": 8, "w": 8, "x": 8, "y": 4},
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 8,
+        "y": 4
+      },
       "id": 402,
       "options": {
         "mode": "html",
@@ -67,16 +160,34 @@
       "type": "text"
     },
     {
-      "datasource": {"type": "datasource", "uid": "grafana"},
+      "datasource": {
+        "type": "datasource",
+        "uid": "grafana"
+      },
       "fieldConfig": {
         "defaults": {
-          "color": {"mode": "thresholds"},
+          "color": {
+            "mode": "thresholds"
+          },
           "mappings": [],
-          "thresholds": {"mode": "absolute", "steps": [{"color": "text", "value": 0}]}
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": 0
+              }
+            ]
+          }
         },
         "overrides": []
       },
-      "gridPos": {"h": 8, "w": 8, "x": 16, "y": 4},
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 16,
+        "y": 4
+      },
       "id": 403,
       "options": {
         "mode": "html",
@@ -87,16 +198,34 @@
       "type": "text"
     },
     {
-      "datasource": {"type": "datasource", "uid": "grafana"},
+      "datasource": {
+        "type": "datasource",
+        "uid": "grafana"
+      },
       "fieldConfig": {
         "defaults": {
-          "color": {"mode": "thresholds"},
+          "color": {
+            "mode": "thresholds"
+          },
           "mappings": [],
-          "thresholds": {"mode": "absolute", "steps": [{"color": "text", "value": 0}]}
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": 0
+              }
+            ]
+          }
         },
         "overrides": []
       },
-      "gridPos": {"h": 3, "w": 24, "x": 0, "y": 12},
+      "gridPos": {
+        "h": 3,
+        "w": 24,
+        "x": 0,
+        "y": 12
+      },
       "id": 404,
       "options": {
         "mode": "html",
@@ -110,10 +239,20 @@
   "preload": false,
   "refresh": "",
   "schemaVersion": 42,
-  "tags": ["sbms", "start"],
-  "templating": {"list": []},
-  "time": {"from": "now-5m", "to": "now"},
-  "timepicker": {"refresh_intervals": []},
+  "tags": [
+    "sbms",
+    "start"
+  ],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-5m",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": []
+  },
   "timezone": "browser",
   "title": "SBMS0 START",
   "uid": "sbms-start-01",
