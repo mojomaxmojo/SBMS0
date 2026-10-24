@@ -31,7 +31,7 @@
         "defaults": {
           "decimals": 2,
           "mappings": [],
-          "max": 8,
+          "max": 7,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -41,7 +41,7 @@
               },
               {
                 "color": "red",
-                "value": 80
+                "value": 7
               }
             ]
           },
@@ -166,7 +166,7 @@
           "groupBy": [],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT sum(\"Battery Power W\") / 3600 / 1000 / 2 FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND \"Battery Power W\" > 0 AND $timeFilter",
+          "query": "SELECT sum(\"Battery Power W\") / 3600 / 1000 FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND \"Battery Power W\" > 0 AND $timeFilter",
           "rawQuery": true,
           "refId": "B",
           "resultFormat": "time_series",
@@ -181,7 +181,7 @@
           "groupBy": [],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT sum(\"Battery Power W\") / 3600 / 1000 / 2 FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND \"Battery Power W\" > 0 AND $timeFilter",
+          "query": "SELECT sum(\"Battery Power W\") / 3600 / 1000 * -1 FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND \"Battery Power W\" < 0 AND $timeFilter",
           "rawQuery": true,
           "refId": "C",
           "resultFormat": "time_series",
@@ -488,7 +488,7 @@
           ],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT  (315 *(100 - \"State of Charge\")  / 100) /  ((\"Battery Current\" +ABS(\"Battery Current\")) / 2 ) * 60 FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND \"Battery Current\" > 0 AND time > now() -5m",
+          "query": "SELECT  (280 *(100 - \"State of Charge\")  / 100) /  ((\"Battery Current\" +ABS(\"Battery Current\")) / 2 ) * 60 FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND \"Battery Current\" > 0 AND time > now() -5m",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -516,7 +516,7 @@
           ],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT  (315 *(100 - \"State of Charge\")  / 100) /  ((\"Battery Current\" +ABS(\"Battery Current\")) / 2 ) * 60 FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND \"Battery Current\" > 0 AND time > now() -15m",
+          "query": "SELECT  (280 *(100 - \"State of Charge\")  / 100) /  ((\"Battery Current\" +ABS(\"Battery Current\")) / 2 ) * 60 FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND \"Battery Current\" > 0 AND time > now() -15m",
           "rawQuery": true,
           "refId": "B",
           "resultFormat": "time_series",
@@ -544,7 +544,7 @@
           ],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT  (315 *(100 - \"State of Charge\")  / 100) /  ((\"Battery Current\" +ABS(\"Battery Current\")) / 2 ) * 60 FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND \"Battery Current\" > 0 AND time > now() -1h",
+          "query": "SELECT  (280 *(100 - \"State of Charge\")  / 100) /  ((\"Battery Current\" +ABS(\"Battery Current\")) / 2 ) * 60 FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND \"Battery Current\" > 0 AND time > now() -1h",
           "rawQuery": true,
           "refId": "C",
           "resultFormat": "time_series",
@@ -640,7 +640,7 @@
           ],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT  (315 * \"State of Charge\" / 100) / ((-\"Battery Current\" + ABS(\"Battery Current\"))/2 ) *60 FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND \"Battery Current\" < 0 AND time > now() -5m",
+          "query": "SELECT  (280 * \"State of Charge\" / 100) / ((-\"Battery Current\" + ABS(\"Battery Current\"))/2 ) *60 FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND \"Battery Current\" < 0 AND time > now() -5m",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -668,7 +668,7 @@
           ],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT  (315 * \"State of Charge\" / 100) /  (\"PV Total Current\"-\"Battery Current\") / 2 * 60  FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND (\"PV Total Current\" - \"Battery Current\") > 0 AND time > now() -1h",
+          "query": "SELECT  (280 * \"State of Charge\" / 100) /  (\"PV Total Current\"-\"Battery Current\") * 60  FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND (\"PV Total Current\" - \"Battery Current\") > 0 AND time > now() -1h",
           "rawQuery": true,
           "refId": "B",
           "resultFormat": "time_series",
@@ -696,7 +696,7 @@
           ],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT  (315 * \"State of Charge\" / 100) /  (\"PV Total Current\"-\"Battery Current\") / 2 * 60  FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND (\"PV Total Current\" - \"Battery Current\") > 0 AND time > now() -24h",
+          "query": "SELECT  (280 * \"State of Charge\" / 100) /  (\"PV Total Current\"-\"Battery Current\") * 60  FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND (\"PV Total Current\" - \"Battery Current\") > 0 AND time > now() -24h",
           "rawQuery": true,
           "refId": "C",
           "resultFormat": "time_series",
