@@ -11,7 +11,7 @@
 # ==============================================================================
 
 AUTH="${1:-admin:admin123}"
-GRAFANA_URL="http://localhost:3000"
+GRAFANA_URL="http://localhost:3001"
 DIR="$(cd "$(dirname "$0")" && pwd)"
 
 DASHBOARDS=(
@@ -52,6 +52,6 @@ done
 echo ""
 echo "=============================================================="
 echo " Fertig: $OK erfolgreich, $FAIL fehlgeschlagen"
-echo " Grafana: http://$(hostname -I | awk '{print $1}'):3000"
+echo " Grafana: http://$(hostname -I | awk '{print $1}'):3001"
 echo "=============================================================="
 [ $FAIL -eq 0 ] && exit 0 || exit 1

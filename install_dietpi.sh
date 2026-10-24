@@ -176,7 +176,7 @@ systemctl enable --now grafana-server
 systemctl restart grafana-server
 sleep 10
 
-curl -s --user admin:admin "http://localhost:3000/api/datasources" -X POST \
+curl -s --user admin:admin123 "http://localhost:3001/api/datasources" -X POST \
   -H 'Content-Type: application/json;charset=UTF-8' \
   --data-binary '{"name":"SBMS_Data","uid":"dg20jcsde4wlcd","isDefault":true,"type":"influxdb",\
 "url":"http://localhost:8086","database":"SBMS","access":"proxy","basicAuth":false}' \
@@ -193,7 +193,7 @@ systemctl is-active influxdb grafana-server SBMS-LiveLogger \
   | paste -d' ' <(echo -e "influxdb:\ngrafana-server:\nSBMS-LiveLogger:") - \
   || true
 echo ""
-echo "  Grafana  : http://${IP}:3000   (admin/admin - ändern!)"
+echo "  Grafana  : http://${IP}:3001   (admin/admin123 - ändern!)"
 echo "  Dashboards: SBMS-Dash-START / -LIVE / -BERECHNUNGEN / -HISTORIE importieren"
 echo "              (Datasource-UID dg20jcsde4wlcd ist bereits angelegt)"
 echo "  Updates  : sudo apt update && sudo apt upgrade"
