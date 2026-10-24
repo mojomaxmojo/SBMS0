@@ -43,20 +43,26 @@ if ! curl -s -u "$AUTH" "$GRAFANA_URL/api/folders/$FOLDER_UID" | grep -q '"uid"'
 fi
 
 # --- 4. Alert-Regel importieren (idempotent via UID) ---
-RES=$(jq -c . "$RULE_FILE" | curl -s -X PUT \
+# PUT aktualisiert existierende Regeln; 404 -> POST legt neu an.
+STATUS=$(curl -s -o /tmp/sbms_alert_resp.json -w '%{http_code}' -X PUT \
   "$GRAFANA_URL/api/v1/provisioning/alert-rules/sbms0-error-alert" \
-  -u "$AUTH" -H 'Content-Type: application/json' -d @-)
+  -u "$AUTH" -H 'Content-Type: application/json' --data-binary "@$RULE_FILE")
 
-if echo "$RES" | grep -qi "error\|invalid\|404"; then
-  # PUT scheitert wenn Regel nicht existiert -> POST versuchen
-  RES=$(jq -c . "$RULE_FILE" | curl -s -X POST \
+if [ "$STATUS" = "404" ] || [ "$STATUS" = "405" ]; then
+  STATUS=$(curl -s -o /tmp/sbms_alert_resp.json -w '%{http_code}' -X POST \
     "$GRAFANA_URL/api/v1/provisioning/alert-rules" \
-    -u "$AUTH" -H 'Content-Type: application/json' -d @-)
+    -u "$AUTH" -H 'Content-Type: application/json' --data-binary "@$RULE_FILE")
 fi
 
 echo ""
 echo "=== Ergebnis ==="
-echo "$RES" | jq -r '.title // .message // "unbekannte Antwort"' 2>/dev/null || echo "$RES"
+if [ "$STATUS" = "200" ] || [ "$STATUS" = "201" ]; then
+  echo "OK (HTTP $STATUS): $(jq -r '.title // "?"' /tmp/sbms_alert_resp.json 2>/dev/null)"
+else
+  echo "FEHLER (HTTP $STATUS):"
+  head -c 400 /tmp/sbms_alert_resp.json 2>/dev/null
+fi
+rm -f /tmp/sbms_alert_resp.json
 echo ""
 echo "Pruefen im Grafana-UI: Alerting -> Alert rules -> SBMS0"
 echo "Test-Benachrichtigung: Alerting -> Contact points -> ntfy-sbms -> Test"
