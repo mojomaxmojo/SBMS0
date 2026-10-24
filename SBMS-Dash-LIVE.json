@@ -310,7 +310,176 @@
       },
       "fieldConfig": {
         "defaults": {
-          "mappings": [],
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "match": "CFET",
+                "specialMatch": "exact",
+                "result": {
+                  "text": "CFET (Laden EIN)",
+                  "color": "green",
+                  "index": 0
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "match": "DFET",
+                "specialMatch": "exact",
+                "result": {
+                  "text": "DFET (Entladen EIN)",
+                  "color": "green",
+                  "index": 0
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "match": "EOC",
+                "specialMatch": "exact",
+                "result": {
+                  "text": "EOC (Ladeende)",
+                  "color": "green",
+                  "index": 0
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "match": "OV",
+                "specialMatch": "exact",
+                "result": {
+                  "text": "OV (Ueberspannung - normal)",
+                  "color": "green",
+                  "index": 0
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "match": "UV",
+                "specialMatch": "exact",
+                "result": {
+                  "text": "UV (Unterspannung - normal)",
+                  "color": "green",
+                  "index": 0
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "match": "IOT",
+                "specialMatch": "exact",
+                "result": {
+                  "text": "IOT (Temperatur)",
+                  "color": "green",
+                  "index": 0
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "match": "UVLK",
+                "specialMatch": "exact",
+                "result": {
+                  "text": "FEHLER: FET-Kurzschluss (UVLK)",
+                  "color": "red",
+                  "index": 0
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "match": "OVLK",
+                "specialMatch": "exact",
+                "result": {
+                  "text": "FEHLER: FET-Kurzschluss (OVLK)",
+                  "color": "red",
+                  "index": 0
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "match": "COC",
+                "specialMatch": "exact",
+                "result": {
+                  "text": "FEHLER: Ueberstrom Laden (COC)",
+                  "color": "red",
+                  "index": 0
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "match": "DOC",
+                "specialMatch": "exact",
+                "result": {
+                  "text": "FEHLER: Ueberstrom Entladen (DOC)",
+                  "color": "red",
+                  "index": 0
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "match": "DSC",
+                "specialMatch": "exact",
+                "result": {
+                  "text": "FEHLER: Kurzschluss (DSC)",
+                  "color": "red",
+                  "index": 0
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "match": "OPEN",
+                "specialMatch": "exact",
+                "result": {
+                  "text": "FEHLER: Zellkabel-Verbindung (OPEN)",
+                  "color": "red",
+                  "index": 0
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "match": "CELF",
+                "specialMatch": "exact",
+                "result": {
+                  "text": "FEHLER: Zellfehler (CELF)",
+                  "color": "red",
+                  "index": 0
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "match": "LVC",
+                "specialMatch": "exact",
+                "result": {
+                  "text": "FEHLER: Zelle zu tief - Laden gesperrt (LVC)",
+                  "color": "red",
+                  "index": 0
+                }
+              }
+            }
+          ],
           "thresholds": {
             "mode": "absolute",
             "steps": [
