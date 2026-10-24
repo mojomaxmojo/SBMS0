@@ -112,7 +112,7 @@
           "groupBy": [],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT \"State of Charge\" FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter",
+          "query": "SELECT last(\"State of Charge\") AS \"State of Charge\" FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = \"SBMS0a\") AND $timeFilter",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series"
@@ -229,7 +229,7 @@
           "groupBy": [],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT \"Battery Voltage\" * \"PV Total Current\" FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter",
+          "query": "SELECT last(\"value\") AS \"PV\" FROM (SELECT \"Battery Voltage\" * \"PV Total Current\" AS \"value\" FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = \"SBMS0a\") AND $timeFilter)",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series"
@@ -243,7 +243,7 @@
           "groupBy": [],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT \"Battery Voltage\" * \"Battery Current\" FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter",
+          "query": "SELECT last(\"value\") AS \"Battery\" FROM (SELECT \"Battery Voltage\" * \"Battery Current\" AS \"value\" FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = \"SBMS0a\") AND $timeFilter)",
           "rawQuery": true,
           "refId": "B",
           "resultFormat": "time_series"
@@ -257,7 +257,7 @@
           "groupBy": [],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT \"Battery Voltage\" * (\"PV Total Current\"-\"Battery Current\") FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter",
+          "query": "SELECT last(\"value\") AS \"Verbrauch\" FROM (SELECT \"Battery Voltage\" * (\"PV Total Current\" - \"Battery Current\") AS \"value\" FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = \"SBMS0a\") AND $timeFilter)",
           "rawQuery": true,
           "refId": "C",
           "resultFormat": "time_series"
@@ -414,7 +414,7 @@
           "groupBy": [],
           "orderByTime": "ASC",
           "policy": "raw_1s",
-          "query": "SELECT \"Cell 1\" AS \"Cell1\", \"Cell 2\" AS \"Cell2\", \"Cell 3\" AS \"Cell3\", \"Cell 4\" AS \"Cell4\", \"Cell 5\" AS \"Cell5\", \"Cell 6\" AS \"Cell6\", \"Cell 7\" AS \"Cell7\", \"Cell 8\" AS \"Cell8\" FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter",
+          "query": "SELECT last(\"Cell 1\") AS \"Cell1\", last(\"Cell 2\") AS \"Cell2\", last(\"Cell 3\") AS \"Cell3\", last(\"Cell 4\") AS \"Cell4\", last(\"Cell 5\") AS \"Cell5\", last(\"Cell 6\") AS \"Cell6\", last(\"Cell 7\") AS \"Cell7\", last(\"Cell 8\") AS \"Cell8\" FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = \"SBMS0a\") AND $timeFilter",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series"
