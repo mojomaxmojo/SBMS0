@@ -19,10 +19,16 @@
     {
       "refId": "A",
       "queryType": "",
-      "relativeTimeRange": {"from": 300, "to": 0},
+      "relativeTimeRange": {
+        "from": 300,
+        "to": 0
+      },
       "datasourceUid": "dg20jcsde4wlcd",
       "model": {
-        "datasource": {"type": "influxdb", "uid": "dg20jcsde4wlcd"},
+        "datasource": {
+          "type": "influxdb",
+          "uid": "dg20jcsde4wlcd"
+        },
         "intervalMs": 1000,
         "maxDataPoints": 43200,
         "policy": "raw_1s",
@@ -35,10 +41,16 @@
     {
       "refId": "B",
       "queryType": "",
-      "relativeTimeRange": {"from": 300, "to": 0},
+      "relativeTimeRange": {
+        "from": 300,
+        "to": 0
+      },
       "datasourceUid": "dg20jcsde4wlcd",
       "model": {
-        "datasource": {"type": "influxdb", "uid": "dg20jcsde4wlcd"},
+        "datasource": {
+          "type": "influxdb",
+          "uid": "dg20jcsde4wlcd"
+        },
         "intervalMs": 1000,
         "maxDataPoints": 43200,
         "policy": "raw_1s",
@@ -51,27 +63,51 @@
     {
       "refId": "C",
       "queryType": "math",
-      "relativeTimeRange": {"from": 0, "to": 0},
+      "relativeTimeRange": {
+        "from": 0,
+        "to": 0
+      },
       "datasourceUid": "__expr__",
       "model": {
         "conditions": [
           {
-            "evaluator": {"params": [0], "type": "gt"},
-            "operator": {"type": "and"},
-            "query": {"params": ["A"]},
-            "reducer": {"params": [], "type": "last"},
+            "evaluator": {
+              "params": [
+                0
+              ],
+              "type": "gt"
+            },
+            "operator": {
+              "type": "and"
+            },
+            "query": {
+              "params": [
+                "A"
+              ]
+            },
+            "reducer": {
+              "params": [],
+              "type": "last"
+            },
             "type": "query"
           }
         ],
-        "datasource": {"type": "__expr__", "uid": "__expr__"},
+        "datasource": {
+          "type": "__expr__",
+          "uid": "__expr__"
+        },
         "expression": "$A",
         "intervalMs": 1000,
         "maxDataPoints": 43200,
         "reducer": "last",
         "refId": "C",
-        "settings": {"mode": "dropNN", "replaceNN": false},
+        "settings": {
+          "mode": "dropNN",
+          "replaceNN": false
+        },
         "type": "math"
       }
     }
-  ]
+  ],
+  "folderUID": "sbms0-folder"
 }

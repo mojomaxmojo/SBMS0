@@ -32,7 +32,17 @@ if ! echo "$CP_LIST" | grep -q '"ntfy-sbms"'; then
   echo "  Die Alert-Regel wird trotzdem angelegt (ohne Benachrichtigung aktiv)."
 fi
 
-# --- 3. Alert-Regel importieren (idempotent via UID) ---
+# --- 3. Alert-Ordner sicherstellen (folderUID ist Pflicht) ---
+FOLDER_UID="sbms0-folder"
+if ! curl -s -u "$AUTH" "$GRAFANA_URL/api/folders/$FOLDER_UID" | grep -q '"uid"'; then
+  curl -s -u "$AUTH" "$GRAFANA_URL/api/folders" -X POST \
+    -H 'Content-Type: application/json' \
+    -d "{\"uid\":\"$FOLDER_UID\",\"title\":\"SBMS0\"}" > /dev/null \
+    && echo "Alert-Ordner 'SBMS0' angelegt." \
+    || echo "Hinweis: Alert-Ordner konnte nicht angelegt werden (evtl. vorhanden)."
+fi
+
+# --- 4. Alert-Regel importieren (idempotent via UID) ---
 RES=$(jq -c . "$RULE_FILE" | curl -s -X PUT \
   "$GRAFANA_URL/api/v1/provisioning/alert-rules/sbms0-error-alert" \
   -u "$AUTH" -H 'Content-Type: application/json' -d @-)
