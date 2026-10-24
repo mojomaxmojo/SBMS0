@@ -82,7 +82,7 @@ apt-get install -y -qq \
   grafana \
   python3-serial \
   python3-influxdb \
-  curl gnupg wget tar
+  curl gnupg wget tar git
 
 # --- Prüfung der Python-Module (Abhängigkeit des LiveLoggers) ------------------
 python3 -c "import serial, influxdb" \
@@ -178,7 +178,7 @@ sleep 10
 
 curl -s --user admin:admin "http://localhost:3000/api/datasources" -X POST \
   -H 'Content-Type: application/json;charset=UTF-8' \
-  --data-binary '{"name":"SBMS_Data","isDefault":true,"type":"influxdb",\
+  --data-binary '{"name":"SBMS_Data","uid":"dg20jcsde4wlcd","isDefault":true,"type":"influxdb",\
 "url":"http://localhost:8086","database":"SBMS","access":"proxy","basicAuth":false}' \
   > /dev/null || echo "    Hinweis: Datasource ggf. manuell im Grafana-UI anlegen."
 
@@ -194,6 +194,7 @@ systemctl is-active influxdb grafana-server SBMS-LiveLogger \
   || true
 echo ""
 echo "  Grafana  : http://${IP}:3000   (admin/admin - ändern!)"
-echo "  Dashboard: 'SBMS-Grafana Dashboard.json' importieren, Refresh = 1s"
+echo "  Dashboards: SBMS-Dash-START / -LIVE / -BERECHNUNGEN / -HISTORIE importieren"
+echo "              (Datasource-UID dg20jcsde4wlcd ist bereits angelegt)"
 echo "  Updates  : sudo apt update && sudo apt upgrade"
 echo "=============================================================="
