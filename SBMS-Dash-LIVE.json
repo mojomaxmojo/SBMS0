@@ -315,80 +315,14 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "orange",
                 "value": 0
-              },
-              {
-                "color": "red",
-                "value": 1
               }
             ]
           },
-          "unit": "none",
-          "color": {
-            "mode": "thresholds"
-          },
-          "custom": {
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            }
-          }
+          "unit": "none"
         },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Flags"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "text",
-                  "mode": "fixed"
-                }
-              },
-              {
-                "id": "thresholds",
-                "value": {
-                  "mode": "absolute",
-                  "steps": [
-                    {
-                      "color": "text",
-                      "value": 0
-                    }
-                  ]
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Error Active"
-            },
-            "properties": [
-              {
-                "id": "thresholds",
-                "value": {
-                  "mode": "absolute",
-                  "steps": [
-                    {
-                      "color": "green",
-                      "value": 0
-                    },
-                    {
-                      "color": "red",
-                      "value": 1
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
         "h": 4,
@@ -406,7 +340,7 @@
           "calcs": [
             "lastNotNull"
           ],
-          "fields": "/^(Flags|Error Active)$/",
+          "fields": "/.*/",
           "values": false
         },
         "text": {
@@ -428,20 +362,6 @@
           "query": "SELECT last(\"Monitor Flags DE\") FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter",
           "rawQuery": true,
           "refId": "A",
-          "resultFormat": "time_series"
-        },
-        {
-          "alias": "Error Active",
-          "datasource": {
-            "type": "influxdb",
-            "uid": "dg20jcsde4wlcd"
-          },
-          "groupBy": [],
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "SELECT last(\"Error Active\") FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter",
-          "rawQuery": true,
-          "refId": "B",
           "resultFormat": "time_series"
         }
       ],
