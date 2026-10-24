@@ -90,6 +90,10 @@ def parse_line(line):
     ]
     flags = ', '.join(name for bit, name in flag_defs if ERR & bit)
 
+    # Fehler-Indikator: 1 wenn ein echtes Fehler-Flag aktiv ist, sonst 0
+    error_flags = ('UVLK', 'OVLK', 'COC', 'DOC', 'DSC', 'OPEN', 'CELF', 'LVC')
+    error_active = 1 if any(bit_name for bit, bit_name in flag_defs if ERR & bit and bit_name in error_flags) else 0
+
     # Deutsche Flag-Texte fuer Grafana (siehe SBMS0-Dokumentation)
     flag_de = {
         'DFET': 'DFET (Entladen EIN)', 'EOC': 'EOC (Ladeende)',
@@ -124,6 +128,7 @@ def parse_line(line):
         'Error Binary': '{0:016b}'.format(ERR),
         'Flags': flags,
         'Flags DE': flags_de,
+        'Error Active': error_active,
     }
 
 
@@ -164,6 +169,7 @@ def build_json_body(data, ts):
                 "Cell 8": data['Cells'][7],
                 "Cell Delta": data['Cell Delta'],
                 "Error Code": data['Error Code'],
+                "Error Active": data['Error Active'],
                 "PV Power W": round(data['PV Total'] * data['Battery Voltage'], 3),
                 "Battery Power W": round(data['Battery Current'] * data['Battery Voltage'], 3),
                 "Consumption Power W": round((data['PV Total'] - data['Battery Current']) * data['Battery Voltage'], 3),
