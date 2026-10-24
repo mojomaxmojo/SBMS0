@@ -21,12 +21,12 @@ DASHBOARDS=(
   "SBMS-Dash-HISTORIE.json"
 )
 
-# Grafana erreichbar?
-if ! curl -s -u "$AUTH" "$GRAFANA_URL/api/health" | grep -q '"database":"ok"'; then
-  echo "FEHLER: Grafana nicht erreichbar unter $GRAFANA_URL (oder Login falsch)."
-  echo "Laeuft Grafana?  systemctl status grafana-server"
-  exit 1
-fi
+# Grafana erreichbar? (grep toleriert beliebige Leerzeichen im JSON)
+HEALTH=$(curl -s -u "$AUTH" "$GRAFANA_URL/api/health")
+echo "$HEALTH" | grep -q '"database"[[:space:]]*:[[:space:]]*"ok"' \
+  || { echo "FEHLER: Grafana nicht erreichbar unter $GRAFANA_URL (oder Login falsch).";
+       echo "Laeuft Grafana?  systemctl status grafana-server";
+       exit 1; }
 
 echo ">>> Importiere ${#DASHBOARDS[@]} Dashboards nach Grafana ($GRAFANA_URL) ..."
 echo ""
