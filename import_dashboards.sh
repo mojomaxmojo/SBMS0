@@ -40,9 +40,9 @@ for f in "${DASHBOARDS[@]}"; do
     | curl -s -X POST "$GRAFANA_URL/api/dashboards/db" \
         -u "$AUTH" -H 'Content-Type: application/json' -d @-)
   STATUS=$(echo "$RES" | jq -r '.status // .message // "unbekannt"')
-  UID=$(echo "$RES" | jq -r '.uid // "?"')
+  DS_UID=$(echo "$RES" | jq -r '.uid // "?"')
   if [ "$STATUS" = "success" ]; then
-    echo "  OK    $f  (uid=$UID)"
+    echo "  OK    $f  (uid=$DS_UID)"
     OK=$((OK+1))
   else
     echo "  FAIL  $f  -> $STATUS"
