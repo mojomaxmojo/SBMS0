@@ -665,10 +665,39 @@
           "groupBy": [],
           "orderByTime": "ASC",
           "policy": "raw_1s",
-          "query": "SELECT (\"Battery Current\" * \"Battery Voltage\") AS \"Battery Power\", (\"PV Total Current\" * \"Battery Voltage\") AS \"PV Power\", (\"External Load\" * \"Battery Voltage\") AS \"Load Power\" FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter",
+          "query": "SELECT (\"Battery Current\" * \"Battery Voltage\") FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter",
           "rawQuery": true,
           "refId": "A",
-          "resultFormat": "time_series"
+          "resultFormat": "time_series",
+          "alias": "Battery Power"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "dg20jcsde4wlcd"
+          },
+          "groupBy": [],
+          "orderByTime": "ASC",
+          "policy": "raw_1s",
+          "query": "SELECT (\"PV Total Current\" * \"Battery Voltage\") FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter",
+          "rawQuery": true,
+          "refId": "B",
+          "resultFormat": "time_series",
+          "alias": "PV Power"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "dg20jcsde4wlcd"
+          },
+          "groupBy": [],
+          "orderByTime": "ASC",
+          "policy": "raw_1s",
+          "query": "SELECT (\"External Load\" * \"Battery Voltage\") FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter",
+          "rawQuery": true,
+          "refId": "C",
+          "resultFormat": "time_series",
+          "alias": "Load Power"
         }
       ],
       "title": "Leistung (Live-Verlauf)",
