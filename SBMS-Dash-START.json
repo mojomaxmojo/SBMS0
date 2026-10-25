@@ -11,37 +11,37 @@
       "asDropdown": false,
       "icon": "bolt",
       "includeVars": false,
-      "keepTime": true,
+      "keepTime": false,
       "tags": [],
       "targetBlank": false,
       "title": "LIVE",
       "tooltip": "Zum LIVE-Dashboard",
       "type": "link",
-      "url": "/d/sbms-live-01/sbms-live"
+      "url": "/d/sbms-live-01/sbms-live?from=now-10m&to=now"
     },
     {
       "asDropdown": false,
       "icon": "calculator",
       "includeVars": false,
-      "keepTime": true,
+      "keepTime": false,
       "tags": [],
       "targetBlank": false,
       "title": "BERECHNUNGEN",
       "tooltip": "Zum BERECHNUNGEN-Dashboard",
       "type": "link",
-      "url": "/d/sbms-calc-01/sbms-berechnungen"
+      "url": "/d/sbms-calc-01/sbms-berechnungen?from=now/d&to=now"
     },
     {
       "asDropdown": false,
       "icon": "history",
       "includeVars": false,
-      "keepTime": true,
+      "keepTime": false,
       "tags": [],
       "targetBlank": false,
       "title": "HISTORIE",
       "tooltip": "Zum HISTORIE-Dashboard",
       "type": "link",
-      "url": "/d/sbms-hist-01/sbms-historie"
+      "url": "/d/sbms-hist-01/sbms-historie?from=now-30d&to=now"
     }
   ],
   "panels": [
