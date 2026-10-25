@@ -662,19 +662,10 @@
             "type": "influxdb",
             "uid": "dg20jcsde4wlcd"
           },
-          "groupBy": [
-            {
-              "params": ["$__interval"],
-              "type": "time"
-            },
-            {
-              "params": ["null"],
-              "type": "fill"
-            }
-          ],
+          "groupBy": [],
           "orderByTime": "ASC",
-          "policy": "downsampled_1m",
-          "query": "SELECT mean(\"Battery Power W\") FROM \"downsampled_1m\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter GROUP BY time($__interval) fill(null)",
+          "policy": "raw_1s",
+          "query": "SELECT (\"Battery Current\" * \"Battery Voltage\") FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -685,19 +676,10 @@
             "type": "influxdb",
             "uid": "dg20jcsde4wlcd"
           },
-          "groupBy": [
-            {
-              "params": ["$__interval"],
-              "type": "time"
-            },
-            {
-              "params": ["null"],
-              "type": "fill"
-            }
-          ],
+          "groupBy": [],
           "orderByTime": "ASC",
-          "policy": "downsampled_1m",
-          "query": "SELECT mean(\"PV Power W\") FROM \"downsampled_1m\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter GROUP BY time($__interval) fill(null)",
+          "policy": "raw_1s",
+          "query": "SELECT (\"PV Total Current\" * \"Battery Voltage\") FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter",
           "rawQuery": true,
           "refId": "B",
           "resultFormat": "time_series",
@@ -708,19 +690,10 @@
             "type": "influxdb",
             "uid": "dg20jcsde4wlcd"
           },
-          "groupBy": [
-            {
-              "params": ["$__interval"],
-              "type": "time"
-            },
-            {
-              "params": ["null"],
-              "type": "fill"
-            }
-          ],
+          "groupBy": [],
           "orderByTime": "ASC",
-          "policy": "downsampled_1m",
-          "query": "SELECT mean(\"Consumption Power W\") FROM \"downsampled_1m\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter GROUP BY time($__interval) fill(null)",
+          "policy": "raw_1s",
+          "query": "SELECT (\"External Load\" * \"Battery Voltage\") FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter",
           "rawQuery": true,
           "refId": "C",
           "resultFormat": "time_series",
@@ -728,11 +701,7 @@
         }
       ],
       "title": "Leistung (Live-Verlauf)",
-      "type": "timeseries",
-      "time": {
-        "from": "now/d",
-        "to": "now"
-      }
+      "type": "timeseries"
     }
   ],
   "preload": false,
