@@ -300,7 +300,7 @@
           "resultFormat": "time_series"
         }
       ],
-      "title": "Power (Live)",
+      "title": "",
       "type": "stat"
     },
     {
@@ -365,7 +365,7 @@
           "resultFormat": "time_series"
         }
       ],
-      "title": "Monitor Flags",
+      "title": "",
       "type": "stat"
     },
     {
