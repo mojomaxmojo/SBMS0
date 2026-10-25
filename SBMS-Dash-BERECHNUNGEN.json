@@ -447,7 +447,17 @@
       "fieldConfig": {
         "defaults": {
           "decimals": 0,
-          "mappings": [],
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0": {
+                  "text": "– lädt gerade nicht (entlädt)",
+                  "index": 0
+                }
+              }
+            }
+          ],
           "max": 2880,
           "min": 0,
           "thresholds": {
@@ -586,6 +596,29 @@
           "refId": "C",
           "resultFormat": "time_series",
           "maxDataPoints": 1000
+        },
+        {
+          "refId": "Z",
+          "alias": "Status",
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "orderByTime": "ASC",
+          "policy": "raw_1s",
+          "query": "SELECT last(\"State of Charge\") - last(\"State of Charge\") AS \"value\" FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND \"Battery Current\" <= 0 AND time > now() - 1m",
+          "rawQuery": true,
+          "resultFormat": "time_series"
         }
       ],
       "title": "Time to full",
@@ -599,7 +632,17 @@
       "fieldConfig": {
         "defaults": {
           "decimals": 0,
-          "mappings": [],
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0": {
+                  "text": "– entlädt gerade nicht (lädt)",
+                  "index": 0
+                }
+              }
+            }
+          ],
           "max": 14400,
           "min": 0,
           "thresholds": {
@@ -738,6 +781,29 @@
           "refId": "C",
           "resultFormat": "time_series",
           "maxDataPoints": 1000
+        },
+        {
+          "refId": "Z",
+          "alias": "Status",
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "orderByTime": "ASC",
+          "policy": "raw_1s",
+          "query": "SELECT last(\"State of Charge\") - last(\"State of Charge\") AS \"value\" FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND \"Battery Current\" >= 0 AND time > now() - 1m",
+          "rawQuery": true,
+          "resultFormat": "time_series"
         }
       ],
       "title": "Time to empty",
