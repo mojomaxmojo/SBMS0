@@ -451,7 +451,7 @@
           "groupBy": [],
           "orderByTime": "ASC",
           "policy": "raw_1s",
-          "query": "SELECT last(\"Cell 1\") AS \"Cell1\", last(\"Cell 2\") AS \"Cell2\", last(\"Cell 3\") AS \"Cell3\", last(\"Cell 4\") AS \"Cell4\", last(\"Cell 5\") AS \"Cell5\", last(\"Cell 6\") AS \"Cell6\", last(\"Cell 7\") AS \"Cell7\", last(\"Cell 8\") AS \"Cell8\" FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter",
+          "query": "SELECT last(\"Cell 1\") AS \"Cell 1\", last(\"Cell 2\") AS \"Cell 2\", last(\"Cell 3\") AS \"Cell 3\", last(\"Cell 4\") AS \"Cell 4\", last(\"Cell 5\") AS \"Cell 5\", last(\"Cell 6\") AS \"Cell 6\", last(\"Cell 7\") AS \"Cell 7\", last(\"Cell 8\") AS \"Cell 8\" FROM \"raw_1s\".\"SBMS_Metrics\" WHERE (\"Name\" = 'SBMS0a') AND $timeFilter",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series"
