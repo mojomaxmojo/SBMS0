@@ -407,7 +407,8 @@
               }
             ]
           },
-          "unit": "volt"
+          "unit": "volt",
+          "displayName": null
         },
         "overrides": []
       },
@@ -459,7 +460,16 @@
       ],
       "title": "Cell Voltages (LCD-Balken)",
       "transparent": true,
-      "type": "bargauge"
+      "type": "bargauge",
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "pattern": "SBMS_Metrics\\.(.*)$",
+            "rename": "$1"
+          }
+        }
+      ]
     },
     {
       "datasource": {
