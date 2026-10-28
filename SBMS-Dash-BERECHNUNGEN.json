@@ -1088,20 +1088,13 @@
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
-          "maxDataPoints": 1000
+          "maxDataPoints": 1000,
+          "alias": "$col"
         }
       ],
       "title": "Cell Voltages (Verlauf)",
       "type": "timeseries",
-      "transformations": [
-        {
-          "id": "renameByRegex",
-          "options": {
-            "pattern": "SBMS_Metrics\\.(.*)$",
-            "rename": "$1"
-          }
-        }
-      ]
+      "transformations": []
     }
   ],
   "preload": false,
