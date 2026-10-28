@@ -744,7 +744,8 @@
       "time": {
         "from": "now/d",
         "to": "now"
-      }
+      },
+      "timeFrom": "now/d"
     }
   ],
   "preload": false,
